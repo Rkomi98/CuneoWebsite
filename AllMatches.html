@@ -1,0 +1,85 @@
+<!-- AllMatches.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuneo Granda Volley: All Matches</title>
+    <style>
+        body {
+            position: relative;
+            margin-top: 50px;
+        }
+
+        #logo {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-left: 120px;
+        }
+
+        nav {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        nav a {
+            margin-right: 30px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px; 
+            font-weight: bold;
+        }
+
+        .chart-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .chart-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flourish-embed {
+            width: 100%;
+            height: 400px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="FirstPage.html">
+        <img id="logo" src="Assets/Images/Logo-Team.png" alt="Logo Cuneo" title="Go to First Page">
+    </a>
+
+    <h1>Cuneo Granda Volley: All Matches</h1>
+
+    <nav>
+        <a href="FirstPage.html">Tutte le partite</a>
+        <a href="#ricezione">Ricezione</a>
+        <a href="#attacco">Attacco</a>
+    </nav>
+
+    <!-- Content for All Matches Section -->
+    <div id="all-matches" class="chart-container">
+        <div class="chart-title">All Matches Statistics</div>
+        <div class="flourish-embed flourish-chart" data-src="visualisation/your-all-matches-visualization-id"></div>
+    </div>
+
+    <script src="https://public.flourish.studio/resources/embed.js"></script>
+
+</body>
+</html>

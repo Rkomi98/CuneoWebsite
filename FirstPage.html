@@ -24,6 +24,40 @@
         h1 {
             margin-left: 120px; /* Adjust margin to create space for the logo */
         }
+        /* Style for the navigation bar */
+        nav {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        nav a {
+            margin-right: 30px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px; 
+            font-weight: bold;
+        }
+        /* Style for the chart divs */
+        .chart-container {
+            margin: 10 auto; /* Center the chart container */
+        }
+        /* Style for the chart titles */
+        .chart-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 30px; /* Add some spacing between the title and the chart */
+            margin-left: 30px; 
+            text-align: left;
+        }
+
+        .flourish-embed {
+            width: 100%;
+            margin-top: 10px; /* Add some spacing between charts */
+        }
+        #battuta.chart-container {
+            margin-top: 50px; /* Add a margin-top of 20px for the first chart container */
+        }
     </style>
 </head>
 <body>
@@ -35,8 +69,35 @@
 
     <h1>Cuneo Granda Volley : Statistics</h1>
 
-    <div class="flourish-embed flourish-chart" data-src="visualisation/16502568"></div>
-    <script src="https://public.flourish.studio/resources/embed.js"></script>
+    <!-- Navigation bar -->
+    <nav>
+        <a href="AllMatches.html">Tutte le partite</a>
+        <a href="#battuta">Battuta</a>
+        <a href="#ricezione">Ricezione</a>
+        <a href="#attacco">Attacco</a>
+    </nav>
+
+    <!-- Battuta Section -->
+    <div id="battuta" class="chart-container">
+        <div class="chart-title">Battuta</div>
+        <div class="flourish-embed flourish-chart" data-src="visualisation/16502568"></div>
+        <script src="https://public.flourish.studio/resources/embed.js"></script>
+    </div>
+
+    <!-- Ricezione Section -->
+    <div id="ricezione" class="chart-container">
+        <div class="chart-title">Ricezione</div>
+        <div class="flourish-embed flourish-chart" data-src="visualisation/16505967"></div>
+        <script src="https://public.flourish.studio/resources/embed.js"></script>
+    </div>
+
+    <!-- Attacco Section -->
+    <div id="attacco" class="chart-container">
+        <div class="chart-title">Attacco</div>
+        <div class="flourish-embed flourish-chart" data-src="visualisation/16506067"></div>
+        <script src="https://public.flourish.studio/resources/embed.js"></script>
+    </div>
+
 
 </body>
 </html>
