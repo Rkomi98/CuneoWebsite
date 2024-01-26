@@ -75,6 +75,8 @@
         <a href="#battuta">Battuta</a>
         <a href="#ricezione">Ricezione</a>
         <a href="#attacco">Attacco</a>
+        <!-- Button to send tabellino -->
+        <button onclick="sendTabellino()">Manda Tabellino</button>
     </nav>
 
     <!-- Battuta Section -->
@@ -97,6 +99,20 @@
         <div class="flourish-embed flourish-chart" data-src="visualisation/16506067"></div>
         <script src="https://public.flourish.studio/resources/embed.js"></script>
     </div>
+    <script>
+        function sendTabellino() {
+            // For demonstration purposes, we'll simulate sending an email
+            var recipientEmail = "mirko98@live.com";
+            var subject = "Tabellino Partita";
+            var body = "Ciao Mirko, ti invio in allegato il tabellino della partita di oggi";
+
+            // Construct the mailto link
+            var mailtoLink = "mailto:" + recipientEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+
+            // Open the default email client
+            window.location.href = mailtoLink;
+        }
+    </script>
 
 
 </body>
