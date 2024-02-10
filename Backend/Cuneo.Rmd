@@ -1,0 +1,43 @@
+---
+title: "Cuneo Data Analysis"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+# Cuneo Data Analysis
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. Each section of the code is then explained.
+
+First of all import the libraries needed
+
+```{r}
+#install.packages(c("datavolley", "ovlytics"))
+library(datavolley)
+library(ggplot2)
+library(dplyr)
+library(ovlytics)
+```
+
+Import the file you are interested in considering more than one match, you have to import all the folder
+
+```{r}
+filename <- "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/Cuneo-Bergamo_cuneo.dvw"
+#d <- dir("C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2324/Parella Torino/Ritorno/", pattern = "dvw$", full.names = TRUE)
+```
+
+```{r}
+x <- dv_read(filename)
+serve_idx <- find_serves(plays(x))
+table(plays(x)$team[serve_idx])
+```
+
+Distribuzione servizi per ogni set
+```{r}
+serve_run_info <- find_runs(plays(x)[serve_idx, ])
+table(unique(serve_run_info[, c("run_id", "run_length")])$run_length)
+
+```
+
