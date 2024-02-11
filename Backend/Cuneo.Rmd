@@ -7,8 +7,6 @@ output:
   pdf_document: default
 ---
 
-# Cuneo Data Analysis
-
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. Each section of the code is then explained.
 
 First of all import the libraries needed
@@ -29,15 +27,149 @@ filename <- "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/Cuneo-Bergam
 ```
 
 ```{r}
+teamName = 'HONDA OLIVERO S.BERNARDO CUNEO'
 x <- dv_read(filename)
 serve_idx <- find_serves(plays(x))
 table(plays(x)$team[serve_idx])
 ```
 
-Distribuzione servizi per ogni set
+Funzioni utili
+
 ```{r}
-serve_run_info <- find_runs(plays(x)[serve_idx, ])
-table(unique(serve_run_info[, c("run_id", "run_length")])$run_length)
+## find rows where a single player is on court
+player_on_court <- function(x, target_player_id, team = NULL) {
+  if (!is.null(team)) team <- match.arg(team, c("home", "visiting"))
+  ## 'team' is optional here, if NULL then we look at both home and visiting teams
+  idx <- rep(FALSE, nrow(x))
+  if (is.null(team) || team == "home") {
+    idx <- idx | x$home_player_id1 == target_player_id | x$home_player_id2 == target_player_id | x$home_player_id3 == target_player_id |
+                 x$home_player_id4 == target_player_id | x$home_player_id5 == target_player_id | x$home_player_id6 == target_player_id
+  }
+  if (is.null(team) || team == "visiting") {
+    idx <- idx | x$visiting_player_id1 == target_player_id | x$visiting_player_id2 == target_player_id | x$visiting_player_id3 == target_player_id |
+                 x$visiting_player_id4 == target_player_id | x$visiting_player_id5 == target_player_id | x$visiting_player_id6 == target_player_id
+  }
+  idx[is.na(idx)] <- FALSE
+  idx
+}
+
+## find rows where any of our target players are on court
+any_player_on_court <- function(x, target_player_ids, team = NULL) {
+  ## for each target player, find rows where they are on court
+  out <- lapply(target_player_ids, function(pid) player_on_court(x, target_player_id = pid, team = team))
+  ## and now find rows where ANY of those players were on court
+  apply(do.call(cbind, out), 1, any)
+}
+
+## find rows where all of our target players are on court
+all_players_on_court <- function(x, target_player_ids, team = NULL) {
+  ## for each target player, find rows where they are on court
+  out <- lapply(target_player_ids, function(pid) player_on_court(x, target_player_id = pid, team = team))
+  ## and now find rows where ALL of those players were on court
+  apply(do.call(cbind, out), 1, all)
+}
 
 ```
 
+```{r}
+d <- dir("C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/", pattern = "dvw$", full.names = TRUE)
+lx <- list()
+## read each file
+for (fi in seq_along(d)) lx[[fi]] <- dv_read(d[fi], insert_technical_timeouts = FALSE)
+## now extract the play-by-play component from each and bind them together
+px <- list()
+for (fi in seq_along(lx)) px[[fi]] <- plays(lx[[fi]])
+px <- do.call(rbind, px)
+
+```
+
+## Rendimento in Ricezione
+
+Ora analizziamo la ricezione:
+
+```{r}
+#, end_zone == 5
+table_data <- px %>% 
+  dplyr::filter(skill == "Reception", team == teamName) %>% 
+  group_by(player_name) %>% 
+  dplyr::summarize(
+    N_receptions = n(),
+    count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
+    count_positive = sum(evaluation_code == "+", na.rm = TRUE),
+    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    count_errori = sum(evaluation_code == "=", na.rm = TRUE),
+    positività = (count_positive + count_perfette)/N_receptions,
+    efficienza = (count_positive + count_perfette - count_errori)/N_receptions,
+  )
+
+table_data
+```
+
+```{r}
+library(plotly)
+
+# Create bubble chart for each player
+
+fig <- plot_ly(table_data, 
+               x = ~positività, 
+               y = ~efficienza,
+               type = 'scatter', 
+               mode = 'markers', 
+               hovertemplate = paste('<i>Player</i>: %{text}',
+                                     '<br><b>Ricezione</b>: %{marker.size}<extra></extra>'),
+               color = ~positività,
+               marker = list(size = ~N_receptions, sizemode = "area", sizeref = 0.005, opacity = 0.5),
+               text = ~player_name
+)
+
+fig <- fig %>% layout(title = 'Qualità Ricezione',
+                      xaxis = list(title = 'Positività', showgrid = TRUE),
+                      yaxis = list(title = 'Efficienza', showgrid = TRUE)
+)
+fig
+```
+
+## Rendimento in Attacco
+
+```{r}
+#  end_zone == 5
+table_data <- px %>% 
+  dplyr::filter(skill == "Attack", team == teamName) %>% 
+  group_by(player_name) %>% 
+  dplyr::summarize(
+    N_attacks = n(),
+    count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
+    count_positive = sum(evaluation_code == "+", na.rm = TRUE),
+    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    count_errori = sum(evaluation_code == "=", na.rm = TRUE),
+    positività = (count_positive + count_perfette)/N_attacks,
+    efficienza = (count_positive + count_perfette - count_errori)/N_attacks,
+  )
+
+table_data
+
+```
+
+```{r}
+fig <- plot_ly(table_data, 
+               x = ~positività, 
+               y = ~efficienza,
+               type = 'scatter', 
+               mode = 'markers', 
+               hovertemplate = paste('<i>Player</i>: %{text}',
+                                     '<br><b>Attacchi</b>: %{marker.size}<extra></extra>'),
+               color = ~positività,
+               marker = list(size = ~N_attacks, sizemode = "area", sizeref = 0.01, opacity = 0.5),
+               text = ~player_name
+)
+
+fig <- fig %>% layout(title = 'Qualità Attacco',
+                      xaxis = list(title = 'Positività', showgrid = FALSE),
+                      yaxis = list(title = 'Efficienza', showgrid = FALSE)
+)
+
+fig
+
+```
