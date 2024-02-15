@@ -83,6 +83,59 @@ px <- do.call(rbind, px)
 
 ```
 
+## Rendimento in Battuta
+
+```{r}
+#, end_zone == 5
+table_data <- px %>% 
+  dplyr::filter(skill == "Serve", team == teamName) %>% 
+  group_by(player_name) %>% 
+  dplyr::summarize(
+    N_battute = n(),
+    count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
+    count_positive = sum(evaluation_code == "+", na.rm = TRUE),
+    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    count_errori = sum(evaluation_code == "=", na.rm = TRUE),
+    positività = (count_positive + count_perfette)/N_battute,
+    efficienza = (count_positive + count_perfette - count_errori)/N_battute,
+  )
+
+table_data
+```
+
+```{r}
+library(plotly)
+
+fig <- plot_ly(table_data, 
+               x = ~positività, 
+               y = ~efficienza,
+               type = 'scatter', 
+               mode = 'markers', 
+               hovertemplate = paste('<i>Player</i>: %{text}',
+                                     '<br><b>Positività</b>: %{x}',
+                                     '<br><b>Efficienza</b>: %{y}',
+                                     '<br><b>Battuta</b>: %{marker.size}<extra></extra>'),
+               color = ~positività,
+               marker = list(size = ~N_battute, sizemode = "area", sizeref = 0.005, opacity = 0.5),
+               text = ~player_name
+)
+
+fig <- fig %>% layout(title = 'Qualità Battuta',
+                      xaxis = list(title = 'Positività', showgrid = TRUE),
+                      yaxis = list(title = 'Efficienza', showgrid = TRUE)
+)
+
+fig
+```
+
+```{r}
+library(htmlwidgets)
+
+# Assuming 'fig' is your Plotly figure
+saveWidget(fig, "Battuta.html")
+```
+
 ## Rendimento in Ricezione
 
 Ora analizziamo la ricezione:
@@ -107,16 +160,14 @@ table_data
 ```
 
 ```{r}
-library(plotly)
-
-# Create bubble chart for each player
-
 fig <- plot_ly(table_data, 
                x = ~positività, 
                y = ~efficienza,
                type = 'scatter', 
                mode = 'markers', 
                hovertemplate = paste('<i>Player</i>: %{text}',
+                                     '<br><b>Positività</b>: %{x}',
+                                     '<br><b>Efficienza</b>: %{y}',
                                      '<br><b>Ricezione</b>: %{marker.size}<extra></extra>'),
                color = ~positività,
                marker = list(size = ~N_receptions, sizemode = "area", sizeref = 0.005, opacity = 0.5),
@@ -128,6 +179,10 @@ fig <- fig %>% layout(title = 'Qualità Ricezione',
                       yaxis = list(title = 'Efficienza', showgrid = TRUE)
 )
 fig
+```
+
+```{r}
+saveWidget(fig, "Ricezione.html")
 ```
 
 ## Rendimento in Attacco
@@ -171,5 +226,8 @@ fig <- fig %>% layout(title = 'Qualità Attacco',
 )
 
 fig
+```
 
+```{r}
+saveWidget(fig, "Attacco.html")
 ```
