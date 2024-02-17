@@ -13,17 +13,14 @@
 
         /* Style for the logo */
         #logo {
-            width: 100px;
-            height: auto;
+            width: auto;
+            height: 72px;
             position: absolute;
-            top: -20px;
+            top: 0px;
             left: 10px;
             cursor: pointer; /* Change cursor to pointer to indicate clickability */
         }
 
-        h1 {
-            margin-left: 120px; /* Adjust margin to create space for the logo */
-        }
         /* Style for the navigation bar */
         nav {
             position: absolute;
@@ -59,27 +56,89 @@
             margin-top: 50px; /* Add a margin-top of 20px for the first chart container */
         }
     </style>
+    <link rel="stylesheet" href="Assets/style_dashboard.css">
+    <!-- 
+    - google font link
+      -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;900&display=swap"
+        rel="stylesheet">
+
+      <!-- 
+        - material icon link
+      -->
+      <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
 </head>
 <body>
+    <header class="header" data-header>
+    <div class="container">
 
     <!-- Clickable logo -->
     <a href="FirstPage.html">
         <img id="logo" src="Assets/Images/Logo-Team.png" alt="Logo Cuneo" title="Go to First Page">
     </a>
 
-    <h1>Cuneo Granda Volley : Statistics</h1>
+    <h1>Cuneo Granda Volley</h1>
 
-    <!-- Navigation bar -->
-    <nav>
-        <a href="AllMatches.html">Tutte le partite</a>
-        <!--<a href="Backend/Cuneo.nb.html">Features</a>-->
-        <a href="dashboard.html">Online Dashboard</a>
-        <a href="#battuta">Battuta</a>
-        <a href="#ricezione">Ricezione</a>
-        <a href="#attacco">Attacco</a>
-        <!-- Button to send tabellino -->
-        <button onclick="sendTabellino()">Manda Tabellino</button>
-    </nav>
+    <button class="menu-toggle-btn icon-box" data-menu-toggle-btn aria-label="Toggle Menu">
+        <span class="material-symbols-rounded  icon">menu</span>
+    </button>
+
+    <nav class="navbar">
+        <div class="container">
+
+                  <ul class="navbar-list">
+
+                    <li>
+                      <a href="#battuta" class="navbar-link icon-box">
+                        <span class="material-symbols-rounded  icon">sports_volleyball</span>
+                        <span>Battuta</span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="#ricezione" class="navbar-link icon-box">
+                        <span class="material-symbols-rounded  icon">bar_chart</span>
+
+                        <span>Ricezione</span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <a href="#attacco" class="navbar-link icon-box">
+                        <span class="material-symbols-rounded  icon">eda</span>
+
+                        <span>Attacco</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="AllMatches.html" class="navbar-link icon-box">
+                        <span class="material-symbols-rounded  icon">trophy</span>
+
+                        <span>Partite passate</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="DB.html" class="navbar-link icon-box">
+                        <span class="material-symbols-rounded  icon">trophy</span>
+
+                        <span>Online Statistics</span>
+                      </a>
+                    </li>
+                    <!-- Button to send tabellino -->
+                    <button onclick="sendTabellino()">Manda Tabellino</button>
+
+
+                  </ul>
+
+                </div>
+              </nav>
+          </div>
+        </header>
+
 
     <!-- Battuta Section -->
     <div id="battuta" class="chart-container">
@@ -115,6 +174,7 @@
             window.location.href = mailtoLink;
         }
     </script>
+    <script src="./assets/js/script.js"></script>
 
 
 </body>

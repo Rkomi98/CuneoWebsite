@@ -1,0 +1,23 @@
+@media only screen and (max-width: 768px) {
+  /* Your mobile-specific CSS styles here */
+
+  header {
+    font-size: 1.5rem; /* increase font size for better readability */
+  }
+
+  main {
+    display: flex; /* change layout to be mobile-friendly */
+    flex-direction: column;
+  }
+
+  #battuta, #ricezione, #attacco {
+    margin: 0 1rem; /* add margins for spacing */
+  }
+  iframe {
+            width: 100%;
+            height: auto;
+            border: none;
+        }
+
+  /* Add more styles as needed */
+}
