@@ -105,6 +105,22 @@ table_data
 ```
 
 ```{r}
+library(kableExtra)
+
+# Apply custom CSS styling to the table
+styled_table <- table_data %>%
+  kable("html") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
+  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+
+# Save the styled table to an HTML file
+writeLines(as.character(styled_table), "Battuta_tab.html")
+
+```
+
+```{r}
 library(plotly)
 
 fig <- plot_ly(table_data, 
@@ -160,6 +176,18 @@ table_data
 ```
 
 ```{r}
+styled_table <- table_data %>%
+  kable("html") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
+  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+
+# Save the styled table to an HTML file
+writeLines(as.character(styled_table), "Ricezione_tab.html")
+```
+
+```{r}
 fig <- plot_ly(table_data, 
                x = ~positività, 
                y = ~efficienza,
@@ -204,7 +232,21 @@ table_data <- px %>%
   )
 
 table_data
+```
 
+```{r}
+styled_table <- table_data %>%
+  kable("html") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
+  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+
+# Save the styled table to an HTML file
+writeLines(as.character(styled_table), "Attacco_tab.html")
+```
+
+```{}
 ```
 
 ```{r}
