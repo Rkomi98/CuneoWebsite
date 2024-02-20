@@ -246,9 +246,6 @@ styled_table <- table_data %>%
 writeLines(as.character(styled_table), "Attacco_tab.html")
 ```
 
-```{}
-```
-
 ```{r}
 fig <- plot_ly(table_data, 
                x = ~positività, 
