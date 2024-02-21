@@ -110,10 +110,11 @@ library(kableExtra)
 # Apply custom CSS styling to the table
 styled_table <- table_data %>%
   kable("html") %>%
-  kable_styling(full_width = FALSE) %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  kable_styling(full_width = FALSE, htmltable_class = 'styled-table') %>%
+  #row_spec(0, bold = TRUE, background = "lightblue") %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Battuta_tab.html")
@@ -179,9 +180,9 @@ table_data
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE) %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Ricezione_tab.html")
@@ -238,9 +239,9 @@ table_data
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE) %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "green") %>%
+  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "red")
+  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Attacco_tab.html")
