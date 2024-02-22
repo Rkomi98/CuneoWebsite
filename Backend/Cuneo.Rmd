@@ -94,8 +94,8 @@ table_data <- px %>%
     N_battute = n(),
     count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
     count_positive = sum(evaluation_code == "+", na.rm = TRUE),
-    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
-    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
     positività = (count_positive + count_perfette)/N_battute,
     efficienza = (count_positive + count_perfette - count_errori)/N_battute,
@@ -110,7 +110,7 @@ library(kableExtra)
 # Apply custom CSS styling to the table
 styled_table <- table_data %>%
   kable("html") %>%
-  kable_styling(full_width = FALSE, htmltable_class = 'styled-table') %>%
+  kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   #row_spec(0, bold = TRUE, background = "lightblue") %>%
   row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
@@ -166,9 +166,9 @@ table_data <- px %>%
     N_receptions = n(),
     count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
     count_positive = sum(evaluation_code == "+", na.rm = TRUE),
-    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
-    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
-    count_errori = sum(evaluation_code == "=", na.rm = TRUE),
+    #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    #count_errori = sum(evaluation_code == "=", na.rm = TRUE),
     positività = (count_positive + count_perfette)/N_receptions,
     efficienza = (count_positive + count_perfette - count_errori)/N_receptions,
   )
@@ -179,7 +179,7 @@ table_data
 ```{r}
 styled_table <- table_data %>%
   kable("html") %>%
-  kable_styling(full_width = FALSE) %>%
+  kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
   row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
@@ -225,8 +225,8 @@ table_data <- px %>%
     N_attacks = n(),
     count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
     count_positive = sum(evaluation_code == "+", na.rm = TRUE),
-    count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
-    count_negative = sum(evaluation_code == "-", na.rm = TRUE),
+    #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
+    #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
     positività = (count_positive + count_perfette)/N_attacks,
     efficienza = (count_positive + count_perfette - count_errori)/N_attacks,
@@ -238,7 +238,7 @@ table_data
 ```{r}
 styled_table <- table_data %>%
   kable("html") %>%
-  kable_styling(full_width = FALSE) %>%
+  kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
   row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
   row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
