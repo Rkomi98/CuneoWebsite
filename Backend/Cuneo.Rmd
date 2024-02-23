@@ -107,14 +107,20 @@ table_data
 ```{r}
 library(kableExtra)
 
-# Apply custom CSS styling to the table
+# Apply custom CSS styling to the entire table
+# Reorder columns to make positività the second column
+table_data <- table_data %>%
+  #select(-efficienza) %>%
+  select(1, 7, everything())
+
+# Apply custom CSS styling to the entire table
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  #row_spec(0, bold = TRUE, background = "lightblue") %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
-  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
+  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
+
+  #row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
+  #row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Battuta_tab.html")
@@ -168,7 +174,7 @@ table_data <- px %>%
     count_positive = sum(evaluation_code == "+", na.rm = TRUE),
     #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
     #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
-    #count_errori = sum(evaluation_code == "=", na.rm = TRUE),
+    count_errori = sum(evaluation_code == "=", na.rm = TRUE),
     positività = (count_positive + count_perfette)/N_receptions,
     efficienza = (count_positive + count_perfette - count_errori)/N_receptions,
   )
@@ -177,12 +183,15 @@ table_data
 ```
 
 ```{r}
+table_data <- table_data %>%
+  #select(-efficienza) %>%
+  select(1, 7, everything())
+
+# Apply custom CSS styling to the entire table
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
-  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
+  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Ricezione_tab.html")
@@ -236,12 +245,15 @@ table_data
 ```
 
 ```{r}
+table_data <- table_data %>%
+  #select(-efficienza) %>%
+  select(1, 7, everything())
+
+# Apply custom CSS styling to the entire table
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  row_spec(which(table_data$efficienza >= 0.3), background = "lightgreen") %>%
-  row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
-  row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
+  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Attacco_tab.html")
