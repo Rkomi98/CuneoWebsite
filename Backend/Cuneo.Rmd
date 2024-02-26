@@ -105,11 +105,31 @@ table_data
 ```
 
 ```{r}
+# Calculate cumulative statistics for the team
+team_total <- table_data %>%
+  summarise(
+    N_battute = sum(N_battute),
+    count_perfette = sum(count_perfette),
+    count_positive = sum(count_positive),
+    count_errori = sum(count_errori),
+    positività = sum(count_positive + count_perfette) / sum(N_battute),
+    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_battute)
+  ) %>%
+  mutate(player_name = "TOT. Squadra")  # Add a player_name for the team total row
+
+# Combine the team total row with the original table data
+table_data_with_total <- bind_rows(table_data, team_total)
+
+# Print the table with the team total row
+table_data_with_total
+```
+
+```{r}
 library(kableExtra)
 
 # Apply custom CSS styling to the entire table
 # Reorder columns to make positività the second column
-table_data <- table_data %>%
+table_data <- table_data_with_total %>%
   #select(-efficienza) %>%
   select(1, 7, everything())
 
@@ -117,7 +137,8 @@ table_data <- table_data %>%
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
+  row_spec(9, bold = TRUE) %>%
+  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.25 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
 
   #row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
   #row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
@@ -183,7 +204,27 @@ table_data
 ```
 
 ```{r}
-table_data <- table_data %>%
+# Compute total statistics for the team
+total_stats <- table_data %>%
+  summarise(
+    N_receptions = sum(N_receptions),
+    count_perfette = sum(count_perfette),
+    count_positive = sum(count_positive),
+    count_errori = sum(count_errori),
+    positività = sum(count_positive + count_perfette) / sum(N_receptions),
+    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_receptions)
+  ) %>%
+  mutate(player_name = "TOT. Squadra")  # Add a player_name for the team total row
+
+# Combine the team total row with the original table data
+table_data_with_total <- bind_rows(table_data, total_stats)
+
+# Print the table with the team total row
+table_data_with_total
+```
+
+```{r}
+table_data <- table_data_with_total %>%
   #select(-efficienza) %>%
   select(1, 7, everything())
 
@@ -191,7 +232,13 @@ table_data <- table_data %>%
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
+  column_spec(2, 
+              background = ifelse(
+                table_data$player_name == "Serena Scognamillo", 
+                ifelse(table_data$efficienza >= 0.56, "lightgreen", ifelse(table_data$efficienza > 0.48 & table_data$efficienza < 0.56, "yellow", "lightcoral")),
+                ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
+                )
+              )
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Ricezione_tab.html")
