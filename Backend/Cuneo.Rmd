@@ -101,6 +101,8 @@ table_data <- px %>%
     efficienza = (count_positive + count_perfette - count_errori)/N_battute,
   )
 
+data_plot <- table_data
+
 table_data
 ```
 
@@ -151,7 +153,7 @@ writeLines(as.character(styled_table), "Battuta_tab.html")
 ```{r}
 library(plotly)
 
-fig <- plot_ly(table_data, 
+fig <- plot_ly(data_plot, 
                x = ~positività, 
                y = ~efficienza,
                type = 'scatter', 
@@ -200,6 +202,8 @@ table_data <- px %>%
     efficienza = (count_positive + count_perfette - count_errori)/N_receptions,
   )
 
+data_plot <- table_data
+
 table_data
 ```
 
@@ -233,11 +237,12 @@ styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   column_spec(2, 
-              background = ifelse(
-                table_data$player_name == "Serena Scognamillo", 
-                ifelse(table_data$efficienza >= 0.56, "lightgreen", ifelse(table_data$efficienza > 0.48 & table_data$efficienza < 0.56, "yellow", "lightcoral")),
-                ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
-                )
+              background = case_when(
+                (table_data$player_name == "Serena Scognamillo" | table_data$player_name == "Federica Ferrario") ~ ifelse(table_data$efficienza >= 0.56, "lightgreen", ifelse(table_data$efficienza > 0.48 & table_data$efficienza < 0.56, "yellow", "lightcoral")),
+                (table_data$player_name == "Lena Stigrot" | table_data$player_name == "Anna Haak") ~ ifelse(table_data$efficienza >= 0.37, "lightgreen", ifelse(table_data$efficienza > 0.31 & table_data$efficienza < 0.37, "yellow", "lightcoral")),
+                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= 0.43, "lightgreen", ifelse(table_data$efficienza > 0.37 & table_data$efficienza < 0.43, "yellow", "lightcoral")),
+                TRUE ~ ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
+              )
               )
 
 # Save the styled table to an HTML file
@@ -245,7 +250,7 @@ writeLines(as.character(styled_table), "Ricezione_tab.html")
 ```
 
 ```{r}
-fig <- plot_ly(table_data, 
+fig <- plot_ly(data_plot, 
                x = ~positività, 
                y = ~efficienza,
                type = 'scatter', 
@@ -288,7 +293,25 @@ table_data <- px %>%
     efficienza = (count_positive + count_perfette - count_errori)/N_attacks,
   )
 
+data_plot <- table_data
+
 table_data
+```
+
+```{r}
+# Compute the total statistics
+total_stats <- table_data %>%
+  summarise(
+    N_attacks = sum(N_attacks),
+    count_perfette = sum(count_perfette),
+    count_positive = sum(count_positive),
+    count_errori = sum(count_errori),
+    positività = sum(count_positive + count_perfette) / sum(N_attacks),
+    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_attacks)
+  )
+
+# Add the total row to the table data
+table_data <- bind_rows(table_data, total_stats)
 ```
 
 ```{r}
@@ -300,14 +323,21 @@ table_data <- table_data %>%
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.2 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
+  column_spec(2, background = case_when(
+                (table_data$player_name == "Anna Adelusi" | table_data$player_name == "Terry Ruth Enweonwu") ~ ifelse(table_data$efficienza >= 0.27, "lightgreen", ifelse(table_data$efficienza > 0.24 & table_data$efficienza < 0.27, "yellow", "lightcoral")),
+                (table_data$player_name == "Anna Haak" | table_data$player_name == "Lena Stigrot") ~ ifelse(table_data$efficienza >= 0.34, "lightgreen", ifelse(table_data$efficienza > 0.30 & table_data$efficienza < 0.34, "yellow", "lightcoral")),
+                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= 0.24, "lightgreen", ifelse(table_data$efficienza > 0.20 & table_data$efficienza < 0.24, "yellow", "lightcoral")),
+                (table_data$player_name == "Saly Thior" | table_data$player_name == "Amandha Sylves" | table_data$player_name == "Anna Hall" | table_data$player_name == "Beatrice Molinaro") ~ ifelse(table_data$efficienza >= 0.44, "lightgreen", ifelse(table_data$efficienza > 0.38 & table_data$efficienza < 0.44, "yellow", "lightcoral")),
+                TRUE ~ ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
+              )
+              )
 
 # Save the styled table to an HTML file
 writeLines(as.character(styled_table), "Attacco_tab.html")
 ```
 
 ```{r}
-fig <- plot_ly(table_data, 
+fig <- plot_ly(data_plot, 
                x = ~positività, 
                y = ~efficienza,
                type = 'scatter', 
