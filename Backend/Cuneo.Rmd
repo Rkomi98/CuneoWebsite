@@ -87,6 +87,7 @@ px <- do.call(rbind, px)
 
 ```{r}
 #, end_zone == 5
+library("formattable") 
 table_data <- px %>% 
   dplyr::filter(skill == "Serve", team == teamName) %>% 
   group_by(player_name) %>% 
@@ -97,8 +98,8 @@ table_data <- px %>%
     #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
     #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
-    positività = (count_positive + count_perfette)/N_battute,
-    efficienza = (count_positive + count_perfette - count_errori)/N_battute,
+    positività = percent((count_positive + count_perfette)/N_battute),
+    efficienza = percent((count_positive + count_perfette - count_errori)/N_battute),
   )
 
 data_plot <- table_data
@@ -114,8 +115,8 @@ team_total <- table_data %>%
     count_perfette = sum(count_perfette),
     count_positive = sum(count_positive),
     count_errori = sum(count_errori),
-    positività = sum(count_positive + count_perfette) / sum(N_battute),
-    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_battute)
+    positività = percent(sum(count_positive + count_perfette) / sum(N_battute)),
+    efficienza = percent(sum(count_positive + count_perfette - count_errori) / sum(N_battute))
   ) %>%
   mutate(player_name = "TOT. Squadra")  # Add a player_name for the team total row
 
@@ -140,7 +141,7 @@ styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   row_spec(9, bold = TRUE) %>%
-  column_spec(2, background = ifelse(table_data$efficienza >= 0.3, "lightgreen",ifelse(table_data$efficienza > 0.25 & table_data$efficienza < 0.3, "yellow", "lightcoral")))
+  column_spec(2, background = ifelse(table_data$efficienza >= percent(0.3), "lightgreen",ifelse(table_data$efficienza > percent(0.25) & table_data$efficienza < percent(0.3), "yellow", "lightcoral")))
 
   #row_spec(which(table_data$efficienza > 0.2 & table_data$efficienza < 0.3), background = "yellow") %>%
   #row_spec(which(table_data$efficienza <= 0.2), background = "lightcoral")
@@ -154,13 +155,13 @@ writeLines(as.character(styled_table), "Battuta_tab.html")
 library(plotly)
 
 fig <- plot_ly(data_plot, 
-               x = ~positività, 
-               y = ~efficienza,
+               x = ~positività*100, 
+               y = ~efficienza*100,
                type = 'scatter', 
                mode = 'markers', 
                hovertemplate = paste('<i>Player</i>: %{text}',
-                                     '<br><b>Positività</b>: %{x}',
-                                     '<br><b>Efficienza</b>: %{y}',
+                                     '<br><b>Positività (%)</b>: %{x})',
+                                     '<br><b>Efficienza (%)</b>: %{y}',
                                      '<br><b>Battuta</b>: %{marker.size}<extra></extra>'),
                color = ~positività,
                marker = list(size = ~N_battute, sizemode = "area", sizeref = 0.005, opacity = 0.5),
@@ -198,8 +199,8 @@ table_data <- px %>%
     #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
     #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
-    positività = (count_positive + count_perfette)/N_receptions,
-    efficienza = (count_positive + count_perfette - count_errori)/N_receptions,
+    positività = percent((count_positive + count_perfette)/N_receptions),
+    efficienza = percent((count_positive + count_perfette - count_errori)/N_receptions),
   )
 
 data_plot <- table_data
@@ -215,8 +216,8 @@ total_stats <- table_data %>%
     count_perfette = sum(count_perfette),
     count_positive = sum(count_positive),
     count_errori = sum(count_errori),
-    positività = sum(count_positive + count_perfette) / sum(N_receptions),
-    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_receptions)
+    positività = percent(sum(count_positive + count_perfette) / sum(N_receptions)),
+    efficienza = percent(sum(count_positive + count_perfette - count_errori) / sum(N_receptions))
   ) %>%
   mutate(player_name = "TOT. Squadra")  # Add a player_name for the team total row
 
@@ -238,10 +239,10 @@ styled_table <- table_data %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   column_spec(2, 
               background = case_when(
-                (table_data$player_name == "Serena Scognamillo" | table_data$player_name == "Federica Ferrario") ~ ifelse(table_data$efficienza >= 0.56, "lightgreen", ifelse(table_data$efficienza > 0.48 & table_data$efficienza < 0.56, "yellow", "lightcoral")),
-                (table_data$player_name == "Lena Stigrot" | table_data$player_name == "Anna Haak") ~ ifelse(table_data$efficienza >= 0.37, "lightgreen", ifelse(table_data$efficienza > 0.31 & table_data$efficienza < 0.37, "yellow", "lightcoral")),
-                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= 0.43, "lightgreen", ifelse(table_data$efficienza > 0.37 & table_data$efficienza < 0.43, "yellow", "lightcoral")),
-                TRUE ~ ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
+                (table_data$player_name == "Serena Scognamillo" | table_data$player_name == "Federica Ferrario") ~ ifelse(table_data$efficienza >= percent(0.56), "lightgreen", ifelse(table_data$efficienza > percent(0.48) & table_data$efficienza < percent(0.56), "yellow", "lightcoral")),
+                (table_data$player_name == "Lena Stigrot" | table_data$player_name == "Anna Haak") ~ ifelse(table_data$efficienza >= percent(0.37), "lightgreen", ifelse(table_data$efficienza > percent(0.31) & table_data$efficienza < percent(0.37), "yellow", "lightcoral")),
+                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= percent(0.43), "lightgreen", ifelse(table_data$efficienza > percent(0.37) & table_data$efficienza < percent(0.43), "yellow", "lightcoral")),
+                TRUE ~ ifelse(table_data$efficienza >= percent(0.42), "lightgreen", ifelse(table_data$efficienza > percent(0.41) & table_data$efficienza < percent(0.42), "orange", "red"))
               )
               )
 
@@ -251,13 +252,13 @@ writeLines(as.character(styled_table), "Ricezione_tab.html")
 
 ```{r}
 fig <- plot_ly(data_plot, 
-               x = ~positività, 
-               y = ~efficienza,
+               x = ~positività*100, 
+               y = ~efficienza*100,
                type = 'scatter', 
                mode = 'markers', 
                hovertemplate = paste('<i>Player</i>: %{text}',
-                                     '<br><b>Positività</b>: %{x}',
-                                     '<br><b>Efficienza</b>: %{y}',
+                                     '<br><b>Positività(%)</b>: %{x}',
+                                     '<br><b>Efficienza(%)</b>: %{y}',
                                      '<br><b>Ricezione</b>: %{marker.size}<extra></extra>'),
                color = ~positività,
                marker = list(size = ~N_receptions, sizemode = "area", sizeref = 0.005, opacity = 0.5),
@@ -289,8 +290,8 @@ table_data <- px %>%
     #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
     #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
-    positività = (count_positive + count_perfette)/N_attacks,
-    efficienza = (count_positive + count_perfette - count_errori)/N_attacks,
+    positività = percent((count_positive + count_perfette)/N_attacks),
+    efficienza = percent((count_positive + count_perfette - count_errori)/N_attacks),
   )
 
 data_plot <- table_data
@@ -306,8 +307,8 @@ total_stats <- table_data %>%
     count_perfette = sum(count_perfette),
     count_positive = sum(count_positive),
     count_errori = sum(count_errori),
-    positività = sum(count_positive + count_perfette) / sum(N_attacks),
-    efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_attacks)
+    positività = percent(sum(count_positive + count_perfette) / sum(N_attacks)),
+    efficienza = percent(sum(count_positive + count_perfette - count_errori) / sum(N_attacks))
   )
 
 # Add the total row to the table data
@@ -324,11 +325,11 @@ styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
   column_spec(2, background = case_when(
-                (table_data$player_name == "Anna Adelusi" | table_data$player_name == "Terry Ruth Enweonwu") ~ ifelse(table_data$efficienza >= 0.27, "lightgreen", ifelse(table_data$efficienza > 0.24 & table_data$efficienza < 0.27, "yellow", "lightcoral")),
-                (table_data$player_name == "Anna Haak" | table_data$player_name == "Lena Stigrot") ~ ifelse(table_data$efficienza >= 0.34, "lightgreen", ifelse(table_data$efficienza > 0.30 & table_data$efficienza < 0.34, "yellow", "lightcoral")),
-                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= 0.24, "lightgreen", ifelse(table_data$efficienza > 0.20 & table_data$efficienza < 0.24, "yellow", "lightcoral")),
-                (table_data$player_name == "Saly Thior" | table_data$player_name == "Amandha Sylves" | table_data$player_name == "Anna Hall" | table_data$player_name == "Beatrice Molinaro") ~ ifelse(table_data$efficienza >= 0.44, "lightgreen", ifelse(table_data$efficienza > 0.38 & table_data$efficienza < 0.44, "yellow", "lightcoral")),
-                TRUE ~ ifelse(table_data$efficienza >= 0.42, "lightgreen", ifelse(table_data$efficienza > 0.41 & table_data$efficienza < 0.42, "orange", "red"))
+                (table_data$player_name == "Anna Adelusi" | table_data$player_name == "Terry Ruth Enweonwu") ~ ifelse(table_data$efficienza >= percent(0.27), "lightgreen", ifelse(table_data$efficienza > percent(0.24) & table_data$efficienza < percent(0.27), "yellow", "lightcoral")),
+                (table_data$player_name == "Anna Haak" | table_data$player_name == "Lena Stigrot") ~ ifelse(table_data$efficienza >= percent(0.34), "lightgreen", ifelse(table_data$efficienza > percent(0.30) & table_data$efficienza < percent(0.34), "yellow", "lightcoral")),
+                (table_data$player_name == "Alice Tanase" | table_data$player_name == "Madison Kubik") ~ ifelse(table_data$efficienza >= percent(0.24), "lightgreen", ifelse(table_data$efficienza > percent(0.20) & table_data$efficienza < percent(0.24), "yellow", "lightcoral")),
+                (table_data$player_name == "Saly Thior" | table_data$player_name == "Amandha Sylves" | table_data$player_name == "Anna Hall" | table_data$player_name == "Beatrice Molinaro") ~ ifelse(table_data$efficienza >= percent(0.44), "lightgreen", ifelse(table_data$efficienza > percent(0.38) & table_data$efficienza < percent(0.44), "yellow", "lightcoral")),
+                TRUE ~ ifelse(table_data$efficienza >= percent(0.42), "lightgreen", ifelse(table_data$efficienza > percent(0.41) & table_data$efficienza < percent(0.42), "orange", "red"))
               )
               )
 
@@ -343,9 +344,11 @@ fig <- plot_ly(data_plot,
                type = 'scatter', 
                mode = 'markers', 
                hovertemplate = paste('<i>Player</i>: %{text}',
+                                     '<br><b>Positività(%)</b>: %{x}',
+                                     '<br><b>Efficienza(%)</b>: %{y}',
                                      '<br><b>Attacchi</b>: %{marker.size}<extra></extra>'),
                color = ~positività,
-               marker = list(size = ~N_attacks, sizemode = "area", sizeref = 0.01, opacity = 0.5),
+               marker = list(size = ~N_attacks, sizemode = "area", sizeref = 0.005, opacity = 0.5),
                text = ~player_name
 )
 
