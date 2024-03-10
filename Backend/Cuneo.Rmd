@@ -177,6 +177,35 @@ fig
 ```
 
 ```{r}
+# Assuming you have your data frame 'data_plot' with columns 'player_name' and 'efficienza'
+
+# Calculate the color based on efficienza values
+data_plot$color <- ifelse(data_plot$efficienza < 0.25, "red",
+                          ifelse(data_plot$efficienza > 0.30, "green", "yellow"))
+
+
+fig <- plot_ly(
+  x = data_plot$player_name,
+  y = round(data_plot$efficienza, digits = 2),
+  marker = list(color = data_plot$color),
+  name = "Efficienza in Battuta",
+  type = "bar",
+  text = round(data_plot$efficienza, digits = 2), textposition = 'auto', marker = list(color = 'rgb(158,202,225)', line = list(color = 'rgb(8,48,107)', width = 1.5)))
+
+fig <- fig %>% layout(title = "Efficienza in Battuta",
+
+         xaxis = list(title = ""),
+
+         yaxis = list(title = ""))
+
+
+fig
+
+# Customize other plot settings as needed
+
+```
+
+```{r}
 library(htmlwidgets)
 
 # Assuming 'fig' is your Plotly figure
