@@ -306,8 +306,26 @@ fig
 # Assuming you have your data frame 'data_plot' with columns 'player_name' and 'efficienza'
 
 # Calculate the color based on efficienza values
-data_plot$color <- ifelse(data_plot$efficienza < 0.25, "red",
-                          ifelse(data_plot$efficienza > 0.30, "green", "yellow"))
+data_plot <- table_data %>%
+  mutate(color = case_when(
+    (player_name %in% c("Serena Scognamillo", "Federica Ferrario") & efficienza >= percent(0.56)) | 
+    (player_name %in% c("Lena Stigrot", "Anna Haak") & efficienza >= percent(0.37)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza >= percent(0.43)) |
+    efficienza >= percent(0.42) ~ "lightgreen",
+    
+    (player_name %in% c("Serena Scognamillo", "Federica Ferrario") & efficienza > percent(0.48) & efficienza < percent(0.56)) | 
+    (player_name %in% c("Lena Stigrot", "Anna Haak") & efficienza > percent(0.31) & efficienza < percent(0.37)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza > percent(0.37) & efficienza < percent(0.43)) |
+    (efficienza > percent(0.41) & efficienza < percent(0.42)) ~ "orange",
+    
+    (player_name %in% c("Serena Scognamillo", "Federica Ferrario") & efficienza <= percent(0.48) ) | 
+    (player_name %in% c("Lena Stigrot", "Anna Haak") & efficienza <= percent(0.31)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza <= percent(0.37)) |
+    efficienza < percent(0.41) ~ "lightcoral",
+    
+    TRUE ~ NA_character_
+  ))
+
 
 
 fig <- plot_ly(
@@ -418,5 +436,90 @@ fig
 ```
 
 ```{r}
+# Add a new column 'color' based on the rules provided
+data_plot <- table_data %>%
+  mutate(color = case_when(
+    (player_name %in% c("Anna Adelusi", "Terry Ruth Enweonwu") & efficienza >= percent(0.27)) | 
+    (player_name %in% c("Anna Haak", "Lena Stigrot") & efficienza >= percent(0.34)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza >= percent(0.24)) |
+    (player_name %in% c("Saly Thior", "Amandha Sylves", "Anna Hall", "Beatrice Molinaro") & efficienza >= percent(0.44)) |
+    efficienza >= percent(0.42) ~ "lightgreen",
+    
+    (player_name %in% c("Anna Adelusi", "Terry Ruth Enweonwu") & efficienza > percent(0.24) & efficienza < percent(0.27)) | 
+    (player_name %in% c("Anna Haak", "Lena Stigrot") & efficienza > percent(0.30) & efficienza < percent(0.34)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza > percent(0.20) & efficienza < percent(0.24)) |
+    (player_name %in% c("Saly Thior", "Amandha Sylves", "Anna Hall", "Beatrice Molinaro") & efficienza > percent(0.38) & efficienza < percent(0.44)) |
+    (efficienza > percent(0.41) & efficienza < percent(0.42)) ~ "orange",
+    
+    (player_name %in% c("Anna Adelusi", "Terry Ruth Enweonwu") & efficienza <= percent(0.24)) | 
+    (player_name %in% c("Anna Haak", "Lena Stigrot") & efficienza <= percent(0.30)) | 
+    (player_name %in% c("Alice Tanase", "Madison Kubik") & efficienza <= percent(0.20)) |
+    (player_name %in% c("Saly Thior", "Amandha Sylves", "Anna Hall", "Beatrice Molinaro") & efficienza <= percent(0.38)) |
+    efficienza < percent(0.41) ~ "lightcoral",
+    
+    TRUE ~ NA_character_
+  ))
+
+
+fig <- plot_ly(
+  x = data_plot$player_name,
+  y = round(data_plot$efficienza, digits = 2),
+  marker = list(color = data_plot$color),
+  name = "Efficienza in Attacco",
+  type = "bar",
+  text = round(data_plot$efficienza, digits = 2), textposition = 'auto', marker = list(color = 'rgb(158,202,225)', line = list(color = 'rgb(8,48,107)', width = 1.5)))
+
+fig <- fig %>% layout(title = "Efficienza in Attacco",
+
+         xaxis = list(title = ""),
+
+         yaxis = list(title = ""))
+
+
+fig
+```
+
+```{r}
 saveWidget(fig, "Attacco.html")
+```
+
+## Volleyball Distribution
+
+```{r}
+library(ggplot2)
+library(htmlwidgets)
+
+for (i in 1:6) {
+  attack_rate <- px %>% 
+    dplyr::filter(skill == "Attack", team == teamName, visiting_setter_position == i) %>%
+    group_by(start_zone) %>% 
+    dplyr::summarize(n_attacks = n()) %>%
+    mutate(rate = n_attacks/sum(n_attacks)) %>% 
+    ungroup
+
+  attack_rate <- cbind(attack_rate, dv_xy(attack_rate$start_zone, end = "lower"))
+
+  tm2i <- attack_rate$team == teams(px)[2]
+  attack_rate[tm2i, c("x", "y")] <- dv_flip_xy(attack_rate[tm2i, c("x", "y")])
+
+  attack_rate$rate_rounded <- round(attack_rate$rate, 2)
+
+  fig2 <- ggplot(attack_rate, aes(x, y, fill = rate_rounded)) + 
+    geom_tile() + 
+    geom_text(aes(label = paste0(round(rate_rounded * 100, 2), "%")), color = "black", size = 3) +
+    ggcourt(labels = teams(px)) +
+    scale_fill_gradient2(name = "Attack rate (%)", labels = scales::percent_format(accuracy = 0.01))
+
+  html_name <- paste0("Distribuzione", i, ".png")
+  
+  # Save the plot as an HTML file
+  ggsave(html_name, plot = fig2, width = 8, height = 6, units = "in", dpi = 300)
+}
+
+```
+
+```{r}
+# Assuming fig2 is your ggplot object
+ggsave(html_name, plot = fig2, width = 8, height = 6, units = "in", dpi = 300)
+
 ```
