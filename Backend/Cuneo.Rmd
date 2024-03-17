@@ -22,7 +22,7 @@ library(ovlytics)
 Import the file you are interested in considering more than one match, you have to import all the folder
 
 ```{r}
-filename <- "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/Cuneo-Bergamo_cuneo.dvw"
+filename <- "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw"
 #d <- dir("C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2324/Parella Torino/Ritorno/", pattern = "dvw$", full.names = TRUE)
 ```
 
@@ -260,13 +260,13 @@ table_data_with_total
 ```{r}
 table_data <- table_data_with_total %>%
   #select(-efficienza) %>%
-  select(1, 7, everything())
+  select(everything())
 
 # Apply custom CSS styling to the entire table
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
-  row_spec(7, bold = TRUE) %>%
+  row_spec(nrow(table_data), bold = TRUE) %>%
   column_spec(2, 
               background = case_when(
                 (table_data$player_name == "Serena Scognamillo" | table_data$player_name == "Federica Ferrario") ~ ifelse(table_data$efficienza >= percent(0.56), "lightgreen", ifelse(table_data$efficienza > percent(0.48) & table_data$efficienza < percent(0.56), "yellow", "lightcoral")),
@@ -393,12 +393,13 @@ table_data <- bind_rows(table_data, total_stats)
 ```{r}
 table_data <- table_data %>%
   #select(-efficienza) %>%
-  select(1, 7, everything())
+  select(everything())
 
 # Apply custom CSS styling to the entire table
 styled_table <- table_data %>%
   kable("html") %>%
   kable_styling(full_width = FALSE, htmltable_class = 'styled-table', html_font = '"Be Vietnam Pro", sans-serif') %>%
+  row_spec(nrow(table_data), bold = TRUE) %>%
   column_spec(2, background = case_when(
                 (table_data$player_name == "Anna Adelusi" | table_data$player_name == "Terry Ruth Enweonwu") ~ ifelse(table_data$efficienza >= percent(0.27), "lightgreen", ifelse(table_data$efficienza > percent(0.24) & table_data$efficienza < percent(0.27), "yellow", "lightcoral")),
                 (table_data$player_name == "Anna Haak" | table_data$player_name == "Lena Stigrot") ~ ifelse(table_data$efficienza >= percent(0.34), "lightgreen", ifelse(table_data$efficienza > percent(0.30) & table_data$efficienza < percent(0.34), "yellow", "lightcoral")),
