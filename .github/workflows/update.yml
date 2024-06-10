@@ -24,7 +24,7 @@ jobs:
     
     - name: Run R script to update analysis
       run: |
-        Rscript /Backend/Cuneo.R
+        Rscript Backend/Cuneo.R
     
     - name: Commit and push changes
       run: |
