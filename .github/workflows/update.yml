@@ -20,8 +20,9 @@ jobs:
     
     - name: Install R packages
       run: |
-        R -e "install.packages(c('shiny', 'ggplot2', 'dplyr', 'ovlytics', 'plotly', 'rmarkdown'))"
         R -e "install.packages("datavolley", repos = 'https://cloud.r-project.org')"
+        R -e "install.packages(c('shiny', 'ggplot2', 'dplyr', 'ovlytics', 'plotly', 'rmarkdown'))"
+        
 
     
     - name: Run R script to update analysis
