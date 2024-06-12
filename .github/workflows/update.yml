@@ -1,8 +1,8 @@
 name: Update and Deploy Cuneo Analysis
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'  # Every 10 minutes
+  #schedule:
+  #  - cron: '*/10 * * * *'  # Every 10 minutes
   push:
     branches:
       - main  # Trigger on push to main branch
@@ -21,10 +21,9 @@ jobs:
     - name: Install R packages
       run: |
         R -e "install.packages('datavolley', version = '1.7.3', repos = c('https://openvolley.r-universe.dev', 'https://cloud.r-project.org'))"
-        R -e "install.packages(c('shiny', 'ggplot2', 'dplyr', 'ovlytics', 'plotly', 'rmarkdown'))"
-        
-
-    
+        R -e "install.packages('ovlytics', version = '1.7.3', repos = c('https://openvolley.r-universe.dev', 'https://cloud.r-project.org'))"
+        R -e "install.packages(c('ggplot2', 'dplyr', 'plotly'))"
+          
     - name: Run R script to update analysis
       run: |
         Rscript Backend/Cuneo.R
