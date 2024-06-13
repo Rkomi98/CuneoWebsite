@@ -2,10 +2,10 @@
 library(datavolley)
 library(ggplot2)
 library(dplyr)
- #library(formattable) 
+#library(formattable) 
 #library(ovlytics)
 
-filename <- "Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw"
+filename <- "Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw" #C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/
 #d <- dir("C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2324/Parella Torino/Ritorno/", pattern = "dvw$", full.names = TRUE)
 
 teamName = 'HONDA OLIVERO S.BERNARDO CUNEO'
@@ -13,41 +13,7 @@ x <- dv_read(filename)
 serve_idx <- find_serves(plays(x))
 table(plays(x)$team[serve_idx])
 
-## find rows where a single player is on court
-player_on_court <- function(x, target_player_id, team = NULL) {
-  if (!is.null(team)) team <- match.arg(team, c("home", "visiting"))
-  ## 'team' is optional here, if NULL then we look at both home and visiting teams
-  idx <- rep(FALSE, nrow(x))
-  if (is.null(team) || team == "home") {
-    idx <- idx | x$home_player_id1 == target_player_id | x$home_player_id2 == target_player_id | x$home_player_id3 == target_player_id |
-                 x$home_player_id4 == target_player_id | x$home_player_id5 == target_player_id | x$home_player_id6 == target_player_id
-  }
-  if (is.null(team) || team == "visiting") {
-    idx <- idx | x$visiting_player_id1 == target_player_id | x$visiting_player_id2 == target_player_id | x$visiting_player_id3 == target_player_id |
-                 x$visiting_player_id4 == target_player_id | x$visiting_player_id5 == target_player_id | x$visiting_player_id6 == target_player_id
-  }
-  idx[is.na(idx)] <- FALSE
-  idx
-}
-
-## find rows where any of our target players are on court
-any_player_on_court <- function(x, target_player_ids, team = NULL) {
-  ## for each target player, find rows where they are on court
-  out <- lapply(target_player_ids, function(pid) player_on_court(x, target_player_id = pid, team = team))
-  ## and now find rows where ANY of those players were on court
-  apply(do.call(cbind, out), 1, any)
-}
-
-## find rows where all of our target players are on court
-all_players_on_court <- function(x, target_player_ids, team = NULL) {
-  ## for each target player, find rows where they are on court
-  out <- lapply(target_player_ids, function(pid) player_on_court(x, target_player_id = pid, team = team))
-  ## and now find rows where ALL of those players were on court
-  apply(do.call(cbind, out), 1, all)
-}
-
-
-d <- dir("C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/", pattern = "dvw$", full.names = TRUE)
+d <- dir("Assets/", pattern = "dvw$", full.names = TRUE)#C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/
 lx <- list()
 ## read each file
 for (fi in seq_along(d)) lx[[fi]] <- dv_read(d[fi], insert_technical_timeouts = FALSE)
