@@ -23,7 +23,7 @@ jobs:
         R -e "options(repos = c(openvolley = 'https://openvolley.r-universe.dev', CRAN = 'https://cloud.r-project.org'))"
         R -e "install.packages('ovlytics')"
         R -e "install.packages('datavolley', version = '1.7.3', repos = c('https://openvolley.r-universe.dev', 'https://cloud.r-project.org'))"
-        R -e "install.packages(c('ggplot2', 'dplyr', 'plotly'))"        
+        R -e "install.packages(c('ggplot2', 'dplyr', 'plotly', 'scales'))"        
           
     - name: Run R script to update analysis
       run: |
