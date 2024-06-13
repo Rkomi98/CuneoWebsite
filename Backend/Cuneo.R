@@ -2,9 +2,9 @@
 library(datavolley)
 library(ggplot2)
 library(dplyr)
-library(ovlytics)
+#library(ovlytics)
 
-filename <- "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw"
+filename <- "Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw"
 #d <- dir("C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2324/Parella Torino/Ritorno/", pattern = "dvw$", full.names = TRUE)
 
 teamName = 'HONDA OLIVERO S.BERNARDO CUNEO'
