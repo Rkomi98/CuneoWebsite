@@ -2,6 +2,7 @@
 library(datavolley)
 library(ggplot2)
 library(dplyr)
+library(scales)  # Add this line
 #library(formattable) 
 #library(ovlytics)
 
@@ -13,7 +14,7 @@ x <- dv_read(filename)
 serve_idx <- find_serves(plays(x))
 table(plays(x)$team[serve_idx])
 
-d <- dir("Assets/", pattern = "dvw$", full.names = TRUE)#C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/
+d <- dir("Assets/", pattern = "dvw$", full.names = TRUE) #C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/
 lx <- list()
 ## read each file
 for (fi in seq_along(d)) lx[[fi]] <- dv_read(d[fi], insert_technical_timeouts = FALSE)
