@@ -2,6 +2,7 @@
 library(datavolley)
 library(ggplot2)
 library(dplyr)
+library(formattable) 
 #library(ovlytics)
 
 filename <- "Assets/&##Backup##_R00 HONDA O-ALLIANZ V.dvw"
@@ -57,7 +58,6 @@ px <- do.call(rbind, px)
 
 
 #, end_zone == 5
-library("formattable") 
 table_data <- px %>% 
   dplyr::filter(skill == "Serve", team == teamName) %>% 
   group_by(player_name) %>% 
