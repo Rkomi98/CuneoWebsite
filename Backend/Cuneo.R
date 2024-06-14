@@ -35,8 +35,8 @@ table_data <- px %>%
     #count_escalamative = sum(evaluation_code == "!", na.rm = TRUE),
     #count_negative = sum(evaluation_code == "-", na.rm = TRUE),
     count_errori = sum(evaluation_code == "=", na.rm = TRUE),
-    positività = percent((count_positive + count_perfette)/N_battute, digits = 0),
-    efficienza = percent((count_positive + count_perfette - count_errori)/N_battute, digits = 0),
+    positività = percent((count_positive + count_perfette)/N_battute, digits = 1),
+    efficienza = percent((count_positive + count_perfette - count_errori)/N_battute, digits = 1),
   )
 
 data_plot <- table_data
@@ -50,8 +50,8 @@ team_total <- table_data %>%
     count_perfette = sum(count_perfette),
     count_positive = sum(count_positive),
     count_errori = sum(count_errori),
-    positività = percent(sum(count_positive + count_perfette) / sum(N_battute), digits = 0),
-    efficienza = percent(sum(count_positive + count_perfette - count_errori) / sum(N_battute), digits = 0)
+    positività = percent(sum(count_positive + count_perfette) / sum(N_battute), digits = 1),
+    efficienza = percent(sum(count_positive + count_perfette - count_errori) / sum(N_battute), digits = 1)
   ) %>%
   mutate(player_name = "TOT. Squadra")  # Add a player_name for the team total row
 
