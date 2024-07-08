@@ -4,7 +4,7 @@ library(datavolley)
 library(dplyr)
 library(DT)
 library(scales)
-library(rsconnect)
+#library(rsconnect)
 
 ui <- fluidPage(
   titlePanel("Volleyball Stats Dashboard"),
@@ -12,7 +12,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       textInput("folderPath", "Enter folder path:", 
-                value = "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Assets/"),
+                value = "Assets/"),
       textInput("teamName", "Enter team name:", 
                 value = "HONDA OLIVERO S.BERNARDO CUNEO"),
       selectInput("skillChoice", "Select skill:", 
@@ -69,15 +69,15 @@ server <- function(input, output, session) {
         count_perfette = sum(evaluation_code == "#", na.rm = TRUE),
         count_positive = sum(evaluation_code == "+", na.rm = TRUE),
         count_errori = sum(evaluation_code == "=", na.rm = TRUE),
-        positività = (count_positive + count_perfette) / N_actions,
-        efficienza = (count_positive + count_perfette - count_errori) / N_actions
+        positività = round((count_positive + count_perfette) / N_actions, digits = 3),
+        efficienza = round((count_positive + count_perfette - count_errori) / N_actions, digits = 3),
       )
     
     # Calculate team total
     team_total <- table_data %>%
       summarise(across(where(is.numeric), sum),
-                positività = sum(count_positive + count_perfette) / sum(N_actions),
-                efficienza = sum(count_positive + count_perfette - count_errori) / sum(N_actions)) %>%
+                positività = round(sum(count_positive + count_perfette) / sum(N_actions), digits = 3),
+                efficienza = round(sum(count_positive + count_perfette - count_errori) / sum(N_actions),digits = 3)) %>%
       mutate(player_name = "TOT. Squadra")
     
     # Combine player data and team total

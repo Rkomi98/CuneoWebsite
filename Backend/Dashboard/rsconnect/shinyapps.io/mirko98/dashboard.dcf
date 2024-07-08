@@ -1,0 +1,12 @@
+name: dashboard
+title: Dashboard
+username: mirko98
+account: mirko98
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12290126
+bundleId: 8838740
+url: https://mirko98.shinyapps.io/dashboard/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
