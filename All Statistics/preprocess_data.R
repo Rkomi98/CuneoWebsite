@@ -65,7 +65,7 @@ process_data <- function() {
     group_by(player_name) %>%
     summarize(
       Att_Tot = n(),
-      Att_Perfetto = sum(evaluation_code == '#' | evaluation_code == '+') / n(),
+      Att_Perfetto = sum(evaluation_code == '#') / n(),
       Att_Efficienza = (sum(evaluation_code == '#') - sum(evaluation_code == '=') - + sum(evaluation_code == '/') ) / n()
     )
   
