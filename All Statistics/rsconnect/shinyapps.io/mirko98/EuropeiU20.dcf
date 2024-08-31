@@ -5,8 +5,9 @@ account: mirko98
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12571593
-bundleId: 9046698
+bundleId: 9046717
 url: https://mirko98.shinyapps.io/EuropeiU20/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: BestPlayer.R|preprocess_data.R|Elenco Giocatori Squadra|Scout
