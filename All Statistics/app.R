@@ -2,7 +2,7 @@ library(shiny)
 library(DT)
 
 # Load the pre-processed data
-final_table <- readRDS("final_table.rds")
+final_table <- readRDS("final_table_France.rds")
 
 # UI definition
 ui <- fluidPage(

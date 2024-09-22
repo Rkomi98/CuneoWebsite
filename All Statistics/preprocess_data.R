@@ -102,6 +102,8 @@ process_data <- function() {
   # Loop through each .sq file
   for (file in sq_files) {
     file_content <- readLines(file)
+    team_line <- strsplit(file_content[2], "\t")[[1]] #Tean :-)
+    team_name <- team_line[2]
     data_lines <- file_content[-c(1, 2)]
     split_data <- strsplit(data_lines, "\t")
     df <- do.call(rbind, lapply(split_data, function(x) c(x[3], x[9], x[10])))
@@ -117,7 +119,8 @@ process_data <- function() {
         Ruolo == "5" ~ "Palleggiatore",
         TRUE ~ "Unknown"
       ))
-    
+    # Add the team name column to each row
+    df$team <- team_name
     # Add the processed dataframe to the list
     df_list[[file]] <- df
   }
@@ -126,7 +129,7 @@ process_data <- function() {
   
   # Select only the relevant columns
   role <- combined_role_df %>%
-    select(player_name, role)
+    select(player_name, role, team)
   
   # Get all unique player names from all tables
   all_players <- unique(c(
@@ -172,4 +175,4 @@ process_data <- function() {
 final_table <- process_data()
 
 # Save the processed data
-saveRDS(final_table, "final_table.rds")
+saveRDS(final_table, "final_table_France_team.rds")

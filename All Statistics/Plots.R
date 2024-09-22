@@ -56,7 +56,7 @@ create_player_radar_plot <- function(final_table, player_name) {
 }
 
 # Example usage:
-create_player_radar_plot(final_table, "Nicole Piomboni")
+create_player_radar_plot(final_table, "Claire HOFFMAN")
 
 performance_data <- final_table %>%
   select(Bat_Positività, Rice_Efficienza, Att_Perfetto, Muro_positivo)
