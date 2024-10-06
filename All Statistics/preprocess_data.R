@@ -46,7 +46,7 @@ process_data <- function() {
     group_by(player_name) %>%
     summarize(
       Bat_Tot = n(),
-      Bat_Positività = sum(evaluation_code == '#' | evaluation_code == '+' | evaluation_code == '!') / n(),
+      Bat_Positiva = sum(evaluation_code == '#' | evaluation_code == '+' | evaluation_code == '!') / n(),
       Bat_Perfetta = sum(((evaluation_code == '#')) / n()),
     )
   
@@ -55,7 +55,7 @@ process_data <- function() {
     group_by(player_name) %>%
     summarize(
       Rice_Tot = n(),
-      Rice_Positivita = sum(evaluation_code == '#' | evaluation_code == '+') / n(),
+      Rice_Positiva = sum(evaluation_code == '#' | evaluation_code == '+') / n(),
       Ace = sum(evaluation_code == '=') / n(),
       Rice_Efficienza = (sum(evaluation_code == '#') + sum(evaluation_code == '+') - sum(evaluation_code == '=')-sum(evaluation_code == '/')) / n()
     )
@@ -102,7 +102,7 @@ process_data <- function() {
   # Loop through each .sq file
   for (file in sq_files) {
     file_content <- readLines(file)
-    team_line <- strsplit(file_content[2], "\t")[[1]] #Tean :-)
+    team_line <- strsplit(file_content[2], "\t")[[1]] #Team :-)
     team_name <- team_line[2]
     data_lines <- file_content[-c(1, 2)]
     split_data <- strsplit(data_lines, "\t")
@@ -175,4 +175,4 @@ process_data <- function() {
 final_table <- process_data()
 
 # Save the processed data
-saveRDS(final_table, "final_table_France_team.rds")
+saveRDS(final_table, "final_table_Germany.rds")
