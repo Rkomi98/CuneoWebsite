@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volleyball Scoreboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .team {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            margin: 0 10px;
+            background-color: #e9ecef;
+        }
+
+        .player {
+            margin: 5px 0;
+            padding: 5px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        .total {
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 10px;
+        }
+
+        .set-score {
+            text-align: center;
+            font-size: 2.5em; /* Increased font size for better visibility */
+            margin: 20px 0;
+            color: #28a745;
+        }
+
+        .sets-played, .timeouts, .substitutions, .video-checks {
+            text-align: center;
+            font-size: 1.5em; /* Increased font size for better visibility */
+            margin: 10px 0;
+            color: #6c757d;
+        }
+
+        .stats {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .set-results {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .set-result {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Volleyball Scoreboard</h1>
+    <div class="set-score">
+        Score: {{ summary_data[-1].set_score }}
+    </div>
+    <div class="sets-played">
+        Sets Played: {{ summary_data[-1].last_set_number }}
+    </div>
+    <div class="stats">
+        <div class="timeouts">Timeouts Called: {{ summary_data[-1].timeouts_called }}</div>
+        <div class="substitutions">Substitutions Done: {{ summary_data[-1].substitutions_done }}</div>
+        <div class="video-checks">Video Checks Called: {{ summary_data[-1].video_checks_called }}</div>
+    </div>
+
+    <!-- Display each set result -->
+    <div class="set-results">
+        <h2>Set Results:</h2>
+        {% for set_number, result in summary_data[-1].set_scores.items() %}
+        <div class="set-result">
+            Set {{ set_number }}: {{ result.winning_team }} won with a score of {{ result.score }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="scoreboard">
+        {% for team in summary_data[:-1] %}
+        <div class="team">
+            <h2>{{ team.team_name }}</h2>
+            <div class="players">
+                {% for player in team.players %}
+                <div class="player">
+                    {{ player.player_name }}: {{ player.total_points }} points (Attack: {{ player.attack_points }}, Serve: {{ player.serve_points }})
+                </div>
+                {% endfor %}
+            </div>
+            <div class="total">Team Total: {{ team.team_total }} points</div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
