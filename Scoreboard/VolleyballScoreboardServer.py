@@ -39,10 +39,12 @@ def summarize_volleyball_set(plays):
         team_plays = plays[plays['team'] == team]
         player_points = {}
         for _, row in team_plays.iterrows():
-            if row['skill'] in ['Attack', 'Serve'] and row['evaluation_code'] == '#':
+            # Include 'Block' in addition to 'Attack' and 'Serve'
+            if row['skill'] in ['Attack', 'Serve', 'Block'] and row['evaluation_code'] == '#':
                 player = row['player_name']
                 if player not in player_points:
-                    player_points[player] = {'Attack': 0, 'Serve': 0}
+                    player_points[player] = {'Attack': 0, 'Serve': 0, 'Block': 0}
+                # Increment the appropriate skill (Attack, Serve, or Block)
                 player_points[player][row['skill']] += 1
         return player_points
 
@@ -52,12 +54,13 @@ def summarize_volleyball_set(plays):
         team_total = 0
 
         for player, points in player_points.items():
-            total_points = points['Attack'] + points['Serve']
+            total_points = points['Attack'] + points['Serve'] + points['Block']  # Include Block in total
             team_summary['players'].append({
                 'player_name': player,
                 'total_points': total_points,
                 'attack_points': points['Attack'],
-                'serve_points': points['Serve']
+                'serve_points': points['Serve'],
+                'block_points': points['Block'],  # Include Block points
             })
             team_total += total_points
 
@@ -75,6 +78,7 @@ def summarize_volleyball_set(plays):
         if re.match(r'^\d+set$', row['code']):
             set_number = int(row['code'][0])  # Extract the number before 'set'
             winning_team = row['team']
+            print(winning_team)
 
             # Look for the previous row to extract the score
             if index > 0:
@@ -111,6 +115,20 @@ def summarize_volleyball_set(plays):
     })
 
     return summary_data
+
+def print_team_summary(team_summary):
+    print(f"\n{team_summary['team_name']} Team:")
+    for player in team_summary['players']:
+        # Ensure Block points are always printed
+        block_points = player.get('block_points', 0)  # Default to 0 if block_points is not found
+        
+        print(f"  {player['player_name']}: "
+              f"{player['total_points']} points "
+              f"(Attack: {player['attack_points']}, "
+              f"Serve: {player['serve_points']}, "
+              f"Block: {block_points})")  # Ensure Block points are displayed
+    
+    print(f"  Team Total: {team_summary['team_total']} points")
 
 
 # Flask route to render the scoreboard

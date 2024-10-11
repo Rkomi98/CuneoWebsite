@@ -112,7 +112,7 @@
             <div class="players">
                 {% for player in team.players %}
                 <div class="player">
-                    {{ player.player_name }}: {{ player.total_points }} points (Attack: {{ player.attack_points }}, Serve: {{ player.serve_points }})
+                    {{ player.player_name }}: {{ player.total_points }} points (Attack: {{ player.attack_points }}, Serve: {{ player.serve_points }}, Block: {{ player.block_points }})
                 </div>
                 {% endfor %}
             </div>
