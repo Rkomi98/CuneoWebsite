@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 # Assign path for DataVolley files
 dvw_path_folder = "C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2425/Olbia/"
+#dvw_path_folder =  "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Scoreboard"
 file_extension = ".dvw"
 
 # Get a list of all files with the specified extension in the directory
@@ -29,22 +30,31 @@ for file_name in file_list:
     print(f"Processing file: {file_name}")  # Debugging line
     combined_df = pd.concat([combined_df, process_file(file_name)], ignore_index=True)
 
-# Summarize volleyball set and return data for rendering
 def summarize_volleyball_set(plays):
-    teams = plays['team'].dropna().unique()
+    teams = plays['team'].dropna().unique()  # Get the team names
+    home_team = plays['home_team'].iloc[0]  # Home team name
+    away_team = plays['visiting_team'].iloc[0]  # Away team name
+
     summary_data = []
-    set_scores = {}  # To keep track of set scores and winners
+    set_scores = []  # To keep track of set scores and winners
+    current_set = 1  # Start with set 1
+
+    # Variables to store current set stats
+    current_timeouts = {'home': 0, 'away': 0}
+    current_substitutions = {'home': 0, 'away': 0}
+    current_video_checks = {'home': 0, 'away': 0}
+
+    home_set_wins = 0
+    away_set_wins = 0
 
     def calculate_player_points(team):
         team_plays = plays[plays['team'] == team]
         player_points = {}
         for _, row in team_plays.iterrows():
-            # Include 'Block' in addition to 'Attack' and 'Serve'
             if row['skill'] in ['Attack', 'Serve', 'Block'] and row['evaluation_code'] == '#':
                 player = row['player_name']
                 if player not in player_points:
                     player_points[player] = {'Attack': 0, 'Serve': 0, 'Block': 0}
-                # Increment the appropriate skill (Attack, Serve, or Block)
                 player_points[player][row['skill']] += 1
         return player_points
 
@@ -54,67 +64,87 @@ def summarize_volleyball_set(plays):
         team_total = 0
 
         for player, points in player_points.items():
-            total_points = points['Attack'] + points['Serve'] + points['Block']  # Include Block in total
+            total_points = points['Attack'] + points['Serve'] + points['Block']
             team_summary['players'].append({
                 'player_name': player,
                 'total_points': total_points,
                 'attack_points': points['Attack'],
                 'serve_points': points['Serve'],
-                'block_points': points['Block'],  # Include Block points
+                'block_points': points['Block']
             })
             team_total += total_points
 
         team_summary['team_total'] = team_total
         return team_summary
 
-    # Count timeouts, substitutions, and video checks
-    timeouts_called = len(plays[plays['code'].str.contains('TO', na=False)])
-    substitutions_done = len(plays[plays['code'].str.contains('SUB', na=False)])
-    video_checks_called = len(plays[plays['code'].str.contains('VC', na=False)])
-
-    # Identify set results from the code column
     for index, row in plays.iterrows():
-        # Check if the code contains "set" (indicating a set completion)
-        if re.match(r'^\d+set$', row['code']):
-            set_number = int(row['code'][0])  # Extract the number before 'set'
-            winning_team = row['team']
-            print(winning_team)
+        # Handle missing values using pd.isna
+        home_score = 0 if pd.isna(row['home_team_score']) else row['home_team_score']
+        away_score = 0 if pd.isna(row['visiting_team_score']) else row['visiting_team_score']
 
-            # Look for the previous row to extract the score
-            if index > 0:
-                prev_row = plays.iloc[index - 1]
-                if '*p' in prev_row['code']:
-                    score_str = prev_row['code']
-                    # Extract scores
-                    scores = score_str.split(':')[1]  # "25:20" => "20"
-                    home_score, away_score = map(int, scores.split(':'))
-                    # Store set score results
-                    set_scores[set_number] = {
-                        'winning_team': winning_team,
-                        'score': f"{home_score}-{away_score}"
-                    }
+        # If either team reaches 25 or more points
+        if home_score >= 25 or away_score >= 25:
+            # Check if the next row has a reset to 0 (set end)
+            if index + 1 < len(plays):
+                next_row = plays.iloc[index + 1]
+                next_home_score = 0 if pd.isna(next_row['home_team_score']) else next_row['home_team_score']
+                next_away_score = 0 if pd.isna(next_row['visiting_team_score']) else next_row['visiting_team_score']
 
-    # Get the last completed set number
-    last_set_number = max(set_scores.keys(), default=0)
+                if next_home_score == 0 or next_away_score == 0:
+                    # The set is complete
+                    set_result = f"{home_score} - {away_score}"
+                    set_scores.append(set_result)
+
+                    # Increment set count for the winning team
+                    if home_score > away_score:
+                        home_set_wins += 1
+                    else:
+                        away_set_wins += 1
+
+                    current_set += 1  # Increment the set number
+
+                    # Reset the stats for the next set
+                    current_timeouts = {'home': 0, 'away': 0}
+                    current_substitutions = {'home': 0, 'away': 0}
+                    current_video_checks = {'home': 0, 'away': 0}
+
+        # Track stats for the current set
+        if row['code'].startswith('*T'):  # Home timeout
+            current_timeouts['home'] += 1
+        elif row['code'].startswith('aT'):  # Away timeout
+            current_timeouts['away'] += 1
+        elif 'VC' in row['code']:  # Video check
+            if row['team'] == plays['home_team'].iloc[0]:
+                current_video_checks['home'] += 1
+            else:
+                current_video_checks['away'] += 1
+        if row['code'].startswith('*c'):  # Home timeout
+            current_substitutions['home'] += 1
+        elif row['code'].startswith('ac'):  # Away timeout
+            current_substitutions['away'] += 1
 
     # Get last non-NaN score for home and away team
-    home_score = plays['home_team_score'].dropna().tail(1).values[0] if not plays['home_team_score'].dropna().empty else 0
-    away_score = plays['visiting_team_score'].dropna().tail(1).values[0] if not plays['visiting_team_score'].dropna().empty else 0
+    final_home_score = plays['home_team_score'].dropna().tail(1).values[0] if not plays['home_team_score'].dropna().empty else 0
+    print(final_home_score)
+    final_away_score = plays['visiting_team_score'].dropna().tail(1).values[0] if not plays['visiting_team_score'].dropna().empty else 0
 
     for team in teams:
         summary_data.append(get_team_summary(team))
 
-    # Include set scores and other details in the summary
+    # Include current set, past set scores, and stats for the dashboard
     summary_data.append({
-        'set_score': f"{home_score} - {away_score}",  # Match score
-        'last_set_number': last_set_number,  # Last set number played
-        'timeouts_called': timeouts_called,
-        'substitutions_done': substitutions_done,
-        'video_checks_called': video_checks_called,
-        'set_scores': set_scores  # Store all set scores
+        'current_set': current_set,
+        'team_set_wins': f"{home_team}: {home_set_wins} - {away_set_wins} {away_team}",  # Set wins string
+        'timeouts': current_timeouts,
+        'substitutions': current_substitutions,
+        'video_checks': current_video_checks,
+        'past_set_scores': set_scores,
+        'set_score': f"{final_home_score} - {final_away_score}"
     })
 
     return summary_data
+
+
 
 def print_team_summary(team_summary):
     print(f"\n{team_summary['team_name']} Team:")

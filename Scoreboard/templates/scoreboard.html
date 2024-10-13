@@ -38,70 +38,59 @@
             background-color: #e9ecef;
         }
 
-        .player {
-            margin: 5px 0;
-            padding: 5px;
-            border: 1px solid #007bff;
-            border-radius: 4px;
-            background-color: #fff;
-        }
-
-        .total {
-            font-weight: bold;
-            color: #007bff;
-            margin-top: 10px;
-        }
-
-        .set-score {
+        .set-info {
+            margin-top: 20px;
+            font-size: 1.5em;
             text-align: center;
-            font-size: 2.5em; /* Increased font size for better visibility */
-            margin: 20px 0;
-            color: #28a745;
-        }
-
-        .sets-played, .timeouts, .substitutions, .video-checks {
-            text-align: center;
-            font-size: 1.5em; /* Increased font size for better visibility */
-            margin: 10px 0;
             color: #6c757d;
         }
 
-        .stats {
-            margin-top: 20px;
+        .set-score {
+            font-size: 3em; /* Larger font size for visibility */
+            color: #28a745; /* Green color for scores */
             text-align: center;
+            margin: 20px 0;
         }
 
-        .set-results {
-            margin-top: 20px;
+        .past-sets {
             text-align: center;
+            margin-top: 20px;
         }
 
-        .set-result {
+        .past-set-result {
             font-size: 1.2em;
+            margin: 5px 0;
+        }
+
+        .stats {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <h1>Volleyball Scoreboard</h1>
+
+    <!-- Set Score Display -->
     <div class="set-score">
         Score: {{ summary_data[-1].set_score }}
     </div>
-    <div class="sets-played">
-        Sets Played: {{ summary_data[-1].last_set_number }}
-    </div>
-    <div class="stats">
-        <div class="timeouts">Timeouts Called: {{ summary_data[-1].timeouts_called }}</div>
-        <div class="substitutions">Substitutions Done: {{ summary_data[-1].substitutions_done }}</div>
-        <div class="video-checks">Video Checks Called: {{ summary_data[-1].video_checks_called }}</div>
+
+    <!-- Current Set Stats -->
+    <div class="set-info">
+        <div>Current Set: {{ summary_data[-1].current_set }}</div>
+        <div>{{ summary_data[-1].team_set_wins }}</div>  <!-- Display set wins in a single row -->
+        <div>Timeouts: {{ summary_data[-1].timeouts.home }} - {{ summary_data[-1].timeouts.away }}</div>
+        <div>Video Checks: {{ summary_data[-1].video_checks.home }} - {{ summary_data[-1].video_checks.away }}</div>
+        <div>Substitutions: {{ summary_data[-1].substitutions.home }} - {{ summary_data[-1].substitutions.away }}</div>
     </div>
 
-    <!-- Display each set result -->
-    <div class="set-results">
-        <h2>Set Results:</h2>
-        {% for set_number, result in summary_data[-1].set_scores.items() %}
-        <div class="set-result">
-            Set {{ set_number }}: {{ result.winning_team }} won with a score of {{ result.score }}
-        </div>
+    <!-- Past Set Scores -->
+    <div class="past-sets">
+        <h2>Past Sets</h2>
+        {% for score in summary_data[-1].past_set_scores %}
+        <div class="past-set-result">{{ score }}</div>
         {% endfor %}
     </div>
 
