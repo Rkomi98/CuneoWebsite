@@ -1,13 +1,13 @@
 name: France_championship
-title: France_Championship
+title: France_championship
 username: mirko98
 account: mirko98
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12613857
-bundleId: 9064797
+bundleId: 9237534
 url: https://mirko98.shinyapps.io/France_championship/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: BestPlayer.R|final_table.rds|Plots.R|Elenco Giocatori Squadra|Scout
+ignoredFiles: BestPlayer.R|final_table.rds|final_table_France_team.rds|final_table_Germany.rds|Foglio Gara.R|Plots.R|preprocess_data.R|Elenco Giocatori Squadra|Scout|Squadre Francia|Squadre Germania

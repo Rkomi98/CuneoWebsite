@@ -175,4 +175,4 @@ process_data <- function() {
 final_table <- process_data()
 
 # Save the processed data
-saveRDS(final_table, "final_table_Germany.rds")
+saveRDS(final_table, "final_table_France.rds")
