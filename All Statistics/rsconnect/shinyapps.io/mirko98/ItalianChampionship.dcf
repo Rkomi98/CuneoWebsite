@@ -1,0 +1,13 @@
+name: ItalianChampionship
+title: ItalianChampionship
+username: mirko98
+account: mirko98
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13108508
+bundleId: 9260249
+url: https://mirko98.shinyapps.io/ItalianChampionship/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: BestPlayer.R|final_table.rds|final_table_France.rds|final_table_France_team.rds|final_table_Germany.rds|Foglio Gara.R|Plots.R|preprocess_data.R|Elenco Giocatori Squadra|Scout|Squadre Francia|Squadre Germania
