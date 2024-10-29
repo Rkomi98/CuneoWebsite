@@ -10,6 +10,7 @@ setwd("C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/All Statistics")
 process_data <- function() {
   # Read and process DVW files
   d <- list.files("Scout/", pattern = "dvw$", full.names = TRUE)
+  #d <- list.files("B1_Scout/", pattern = "dvw$", full.names = TRUE)
   lx <- list()
   # Read each file with error handling
   for (fi in seq_along(d)) {
@@ -96,6 +97,7 @@ process_data <- function() {
   
   # Read and process SQ files for roles
   sq_files <- list.files("Elenco Giocatori Squadra", pattern = "\\.sq$", full.names = TRUE)
+  #sq_files <- list.files("B1_SQ", pattern = "\\.sq$", full.names = TRUE)
   # Initialize an empty list to store the dataframes
   df_list <- list()
   
