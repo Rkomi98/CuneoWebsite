@@ -134,10 +134,11 @@ def summarize_volleyball_set(plays):
     # Include current set, past set scores, and stats for the dashboard
     summary_data.append({
         'current_set': current_set,
-        'team_set_wins': f"{home_team}: {home_set_wins} - {away_set_wins} {away_team}",  # Set wins string
+        #'team_set_wins': f"{home_team}: {home_set_wins} - {away_set_wins} {away_team}",  # Set wins string
+        'team_set_wins': f"{home_set_wins} - {away_set_wins}",  # Set wins string
         'timeouts': current_timeouts,
-        'substitutions': current_substitutions,
-        'video_checks': current_video_checks,
+        #'substitutions': current_substitutions,
+        #'video_checks': current_video_checks,
         'past_set_scores': set_scores,
         'set_score': f"{final_home_score} - {final_away_score}"
     })
