@@ -1,113 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volleyball Scoreboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            min-height: 100vh;
+            background-image: url('https://raw.githubusercontent.com/Rkomi98/CuneoWebsite.io/refs/heads/main/Scoreboard/templates/SFONDO_CUNEO.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
-        h1 {
-            text-align: center;
-            color: #343a40;
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
         }
 
-        .scoreboard {
+        .team-panel {
+            padding: 2rem;
             display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            border: 2px solid #007bff;
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #fff;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: rgba(0, 0, 0, 0.3); 
         }
 
-        .team {
-            flex: 1;
-            padding: 10px;
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
             text-align: center;
-            border: 1px solid #007bff;
-            border-radius: 8px;
-            margin: 0 10px;
-            background-color: #e9ecef;
-        }
-
-        .set-info {
-            margin-top: 20px;
-            font-size: 1.5em;
-            text-align: center;
-            color: #6c757d;
         }
 
         .set-score {
-            font-size: 3em; /* Larger font size for visibility */
-            color: #28a745; /* Green color for scores */
-            text-align: center;
-            margin: 20px 0;
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .set-info {
+            font-size: 2rem;
+            margin-bottom: 2rem;
         }
 
         .past-sets {
-            text-align: center;
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .past-set-result {
-            font-size: 1.2em;
-            margin: 5px 0;
+            font-size: 1.5rem;
+            padding: 0.5rem 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
         }
 
-        .stats {
+        .player {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .team-name {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
             text-align: center;
-            font-size: 1.2em;
-            margin: 20px 0;
+        }
+
+        .total {
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Volleyball Scoreboard</h1>
+    <div class="container">
+        <!-- Left Team Panel -->
+        <div class="team-panel">
+            {% for team in summary_data[:-1][:1] %}
+            <div class="team-name">{{ team.team_name }}</div>
+            {% for player in team.players %}
+            <div class="player">
+                {{ player.player_name }}: {{ player.total_points }} pts
+                <br>
+                <small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>
+            </div>
+            {% endfor %}
+            <div class="total">Total: {{ team.team_total }} points</div>
+            {% endfor %}
+        </div>
 
-    <!-- Set Score Display -->
-    <div class="set-score">
-        Score: {{ summary_data[-1].set_score }}
-    </div>
-
-    <!-- Current Set Stats -->
-    <div class="set-info">
-        <div>Current Set: {{ summary_data[-1].current_set }}</div>
-        <div>{{ summary_data[-1].team_set_wins }}</div>  <!-- Display set wins in a single row -->
-        <div>Timeouts: {{ summary_data[-1].timeouts.home }} - {{ summary_data[-1].timeouts.away }}</div>
-        <div>Video Checks: {{ summary_data[-1].video_checks.home }} - {{ summary_data[-1].video_checks.away }}</div>
-        <div>Substitutions: {{ summary_data[-1].substitutions.home }} - {{ summary_data[-1].substitutions.away }}</div>
-    </div>
-
-    <!-- Past Set Scores -->
-    <div class="past-sets">
-        <h2>Past Sets</h2>
-        {% for score in summary_data[-1].past_set_scores %}
-        <div class="past-set-result">{{ score }}</div>
-        {% endfor %}
-    </div>
-
-    <div class="scoreboard">
-        {% for team in summary_data[:-1] %}
-        <div class="team">
-            <h2>{{ team.team_name }}</h2>
-            <div class="players">
-                {% for player in team.players %}
-                <div class="player">
-                    {{ player.player_name }}: {{ player.total_points }} points (Attack: {{ player.attack_points }}, Serve: {{ player.serve_points }}, Block: {{ player.block_points }})
-                </div>
+        <!-- Center Score Panel -->
+        <div class="center-panel">
+            <div class="set-score">
+                {{ summary_data[-1].set_score }}
+            </div>
+            <div class="set-info">
+                Set {{ summary_data[-1].current_set }}<br>
+                {{ summary_data[-1].team_set_wins }}
+            </div>
+            <div class="past-sets">
+                <h2>Previous Sets</h2>
+                {% for score in summary_data[-1].past_set_scores %}
+                <div class="past-set-result">{{ score }}</div>
                 {% endfor %}
             </div>
-            <div class="total">Team Total: {{ team.team_total }} points</div>
         </div>
-        {% endfor %}
+
+        <!-- Right Team Panel -->
+        <div class="team-panel">
+            {% for team in summary_data[:-1][1:] %}
+            <div class="team-name">{{ team.team_name }}</div>
+            {% for player in team.players %}
+            <div class="player">
+                {{ player.player_name }}: {{ player.total_points }} pts
+                <br>
+                <small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>
+            </div>
+            {% endfor %}
+            <div class="total">Total: {{ team.team_total }} points</div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

@@ -9,8 +9,8 @@ import re
 app = Flask(__name__)
 
 # Assign path for DataVolley files
-dvw_path_folder = "C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2425/Olbia/"
-#dvw_path_folder =  "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Scoreboard"
+#dvw_path_folder = "C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2425/Olbia/"
+dvw_path_folder =  "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Scoreboard"
 file_extension = ".dvw"
 
 # Get a list of all files with the specified extension in the directory
@@ -42,7 +42,7 @@ def summarize_volleyball_set(plays):
     # Variables to store current set stats
     current_timeouts = {'home': 0, 'away': 0}
     current_substitutions = {'home': 0, 'away': 0}
-    current_video_checks = {'home': 0, 'away': 0}
+    #current_video_checks = {'home': 0, 'away': 0}
 
     home_set_wins = 0
     away_set_wins = 0
@@ -83,7 +83,7 @@ def summarize_volleyball_set(plays):
         away_score = 0 if pd.isna(row['visiting_team_score']) else row['visiting_team_score']
 
         # If either team reaches 25 or more points
-        if home_score >= 25 or away_score >= 25:
+        if (home_score >= 25 or away_score >= 25) and abs(home_score - away_score) >= 2:
             # Check if the next row has a reset to 0 (set end)
             if index + 1 < len(plays):
                 next_row = plays.iloc[index + 1]
