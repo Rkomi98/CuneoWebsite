@@ -9,8 +9,8 @@ setwd("C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/All Statistics")
 # Data processing function
 process_data <- function() {
   # Read and process DVW files
-  d <- list.files("Scout/", pattern = "dvw$", full.names = TRUE)
-  #d <- list.files("B1_Scout/", pattern = "dvw$", full.names = TRUE)
+  #d <- list.files("Scout/", pattern = "dvw$", full.names = TRUE)
+  d <- list.files("B1_Scout/", pattern = "dvw$", full.names = TRUE)
   lx <- list()
   # Read each file with error handling
   for (fi in seq_along(d)) {
@@ -40,7 +40,9 @@ process_data <- function() {
   px <- do.call(rbind, px)
   
   unique_player_names <- unique(px$player_name)
+  print(unique_player_names)
   unique_player_names <- unique_player_names[!is.na(unique_player_names)]
+  print(unique_player_names)
   
   battuta_table <- px %>%
     filter(skill == "Serve") %>%
@@ -96,8 +98,8 @@ process_data <- function() {
     mutate(Eff = Punti_tot - Err)
   
   # Read and process SQ files for roles
-  sq_files <- list.files("Elenco Giocatori Squadra", pattern = "\\.sq$", full.names = TRUE)
-  #sq_files <- list.files("B1_SQ", pattern = "\\.sq$", full.names = TRUE)
+  #sq_files <- list.files("Elenco Giocatori Squadra", pattern = "\\.sq$", full.names = TRUE)
+  sq_files <- list.files("B1_SQ", pattern = "\\.sq$", full.names = TRUE)
   # Initialize an empty list to store the dataframes
   df_list <- list()
   
@@ -177,4 +179,4 @@ process_data <- function() {
 final_table <- process_data()
 
 # Save the processed data
-saveRDS(final_table, "final_table_France.rds")
+saveRDS(final_table, "final_table_ItalyB1.rds")

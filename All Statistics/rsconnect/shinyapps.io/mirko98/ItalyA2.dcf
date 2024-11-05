@@ -5,9 +5,9 @@ account: mirko98
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13119078
-bundleId: 9264359
+bundleId: 9301796
 url: https://mirko98.shinyapps.io/ItalyA2/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: BestPlayer.R|final_table.rds|final_table_France.rds|final_table_France_team.rds|final_table_Germany.rds|final_table_Italy.rds|Foglio Gara.R|Plots.R|preprocess_data.R|Elenco Giocatori Squadra|Scout|Squadre Francia|Squadre Germania|Squadre Italia|SquadreA2
+ignoredFiles: BestPlayer.R|final_table.rds|final_table_France.rds|final_table_France_team.rds|final_table_Germany.rds|final_table_Italy.rds|final_table_ItalyA1.rds|final_table_ItalyB1.rds|Foglio Gara.R|Plots.R|preprocess_data.R|B1_Scout|B1_SQ|Elenco Giocatori Squadra|Scout A2|Scout Francia|Scout Germania|Scout Serie A|Scout|Squadre Francia|Squadre Germania|Squadre Italia|SquadreA2

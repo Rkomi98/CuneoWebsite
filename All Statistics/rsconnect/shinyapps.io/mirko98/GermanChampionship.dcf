@@ -5,9 +5,9 @@ account: mirko98
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12921758
-bundleId: 9288074
+bundleId: 9301783
 url: https://mirko98.shinyapps.io/GermanChampionship/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: BestPlayer.R|final_table.rds|final_table_France.rds|final_table_France_team.rds|final_table_Italy.rds|final_table_ItalyA1.rds|final_table_ItalyA2.rds|final_table_ItalyB1.rds|Foglio Gara.R|Plots.R|preprocess_data.R|B1_Scout|B1_SQ|Elenco Giocatori Squadra|Scout Germania|Scout Serie A|Scout|Squadre Francia|Squadre Germania|Squadre Italia|SquadreA2
+ignoredFiles: BestPlayer.R|final_table.rds|final_table_France.rds|final_table_France_team.rds|final_table_Italy.rds|final_table_ItalyA1.rds|final_table_ItalyA2.rds|final_table_ItalyB1.rds|Foglio Gara.R|Plots.R|preprocess_data.R|B1_Scout|B1_SQ|Elenco Giocatori Squadra|Scout Francia|Scout Germania|Scout Serie A|Scout|Squadre Francia|Squadre Germania|Squadre Italia|SquadreA2
