@@ -95,13 +95,13 @@ class DataVolley:
         teams = get_teams(rows)
         self.home_team_id = teams[0].split(";")[0]
         self.home_team = teams[0].split(";")[1]
-        self.home_setswon = int(teams[0].split(";")[2]) 
+        self.home_setswon = int(teams[0].split(";")[2] or 0)
         self.home_coaches = []
         self.home_coaches.append(teams[0].split(';')[3])
         self.home_coaches.append(teams[0].split(';')[4])
         self.visiting_team_id = teams[1].split(";")[0]
         self.visiting_team = teams[1].split(";")[1]
-        self.visiting_setswon = int(teams[1].split(";")[2])
+        self.visiting_setswon = int(teams[1].split(";")[2] or 0)
         self.visiting_coaches = []
         self.visiting_coaches.append(teams[1].split(';')[3])
         self.visiting_coaches.append(teams[1].split(';')[4])
