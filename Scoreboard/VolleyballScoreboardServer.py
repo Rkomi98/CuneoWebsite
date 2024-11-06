@@ -8,7 +8,7 @@ import re
 # Initialize Flask app
 app = Flask(__name__)
 
-# Assign path for DataVolley files
+# Assign path for DataVolley files -- TODO to be changed!
 #dvw_path_folder = "C:/Users/mirko/OneDrive - Politecnico di Milano/Altro/Volley/Conco2425/Olbia/"
 dvw_path_folder =  "C:/Users/mirko/Documents/GitHub/CuneoWebsite.io/Scoreboard"
 file_extension = ".dvw"
@@ -173,4 +173,4 @@ def show_scoreboard():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

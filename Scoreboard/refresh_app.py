@@ -18,7 +18,7 @@ class ChangeHandler(FileSystemEventHandler):
             self.restart_function()
 
 def run_server():
-    app.run(debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False)
 
 def restart_server():
     global server_process
