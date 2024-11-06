@@ -22,6 +22,8 @@ combined_df = pd.DataFrame()
 
 def process_file(path):
     dv_instance = read_dv.DataVolley(os.path.join(dvw_path_folder, path))
+    dv_instance.home_setswon = int(dv_instance.home_setswon or 0)
+    dv_instance.visiting_setswon = int(dv_instance.visiting_setswon or 0)
     df = dv_instance.get_plays()
     return df
 
