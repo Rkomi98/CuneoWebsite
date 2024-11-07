@@ -25,6 +25,8 @@ def process_file(path):
     dv_instance.home_setswon = int(dv_instance.home_setswon or 0)
     dv_instance.visiting_setswon = int(dv_instance.visiting_setswon or 0)
     df = dv_instance.get_plays()
+    print(df.columns)  # Debugging line to see the columns
+    print(df.head())   # Optional: See the first few rows
     return df
 
 # Process each file and combine data
