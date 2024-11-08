@@ -141,10 +141,34 @@ class DataVolley:
         plays = full_file.iloc[index_of_scout+1:].reset_index(drop = True)
 
         # Create code, point_phase attack_phase start_coordinate mid_coordinate end_coordinate time set home_rotation visitng_rotation video_file_number video_time
-        plays = plays[0].str.split(';', expand = True).rename({0: 'code', 1: 'point_phase', 2: 'attack_phase', 4: 'start_coordinate', 5: 'mid_coordinate', 6: 'end_coordinate', 7: 'time', 8: 'set_number', 9: 'home_setter_position', 10: 'visiting_setter_position', 11: 'video_file_number', 12: 'video_time'}, axis=1)
+        # Split rows by ';' and ensure we have a consistent number of columns
+        plays = plays[0].str.split(';', expand=True)
+        
+        # Define the expected number of columns after splitting
+        expected_columns = 27  # Based on observed structure and column naming requirements
+        
+        # Add or trim columns as needed
+        if plays.shape[1] < expected_columns:
+            print('Rip Here')
+            plays = plays.reindex(columns=range(expected_columns), fill_value=pd.NA)
+        elif plays.shape[1] > expected_columns:
+            print('Gooo')
+            plays = plays.iloc[:, :expected_columns]
+        
+        # Now rename columns as intended, ensuring existing mappings align with the new structure
+        plays = plays.rename({
+            0: 'code', 1: 'point_phase', 2: 'attack_phase', 
+            4: 'start_coordinate', 5: 'mid_coordinate', 6: 'end_coordinate', 
+            7: 'time', 8: 'set_number', 9: 'home_setter_position', 
+            10: 'visiting_setter_position', 11: 'video_file_number', 
+            12: 'video_time'
+        }, axis=1)
+        
+        # Assign additional column names and drop unnecessary columns as in original code
         plays.columns.values[14:20] = [f"home_p{i+1}" for i in range(6)]
         plays.columns.values[20:26] = [f"visiting_p{i+1}" for i in range(6)]
-        plays = plays.drop(columns=([3, 13, 26]))
+        plays = plays.drop(columns=[3, 13, 26], errors='ignore')  # Drop these columns if they exist
+
 
         # Create match_id
         plays['match_id'] = str(uuid.uuid4())
