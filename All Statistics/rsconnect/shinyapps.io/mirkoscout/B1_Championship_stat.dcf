@@ -5,7 +5,7 @@ account: mirkoscout
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13208280
-bundleId: 9317408
+bundleId: 9381762
 url: https://mirkoscout.shinyapps.io/B1_Championship_stat/
 version: 1
 asMultiple: FALSE

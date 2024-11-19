@@ -5,7 +5,7 @@ account: mirko98
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12613857
-bundleId: 9329180
+bundleId: 9365483
 url: https://mirko98.shinyapps.io/France_championship/
 version: 1
 asMultiple: FALSE
