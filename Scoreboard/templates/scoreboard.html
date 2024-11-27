@@ -6,6 +6,9 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            display: flex; /* Center the container */
+            align-items: center;
+            justify-content: center;
             background-image: url('https://raw.githubusercontent.com/Rkomi98/CuneoWebsite.io/refs/heads/main/Scoreboard/templates/SFONDO_CUNEO.jpeg');
             background-size: cover;
             background-position: center;
@@ -13,21 +16,25 @@
             font-family: 'Arial', sans-serif;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
         }
 
         .container {
             display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            min-height: 100vh;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            min-height: 90vh;
+            width: 100%;
             background-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
         }
 
         .team-panel {
             padding: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 1rem; /* More spacing for clarity */
             background-color: rgba(0, 0, 0, 0.3);
+            max-height: 100%;
         }
 
         .center-panel {
@@ -37,17 +44,19 @@
             padding: 1rem;
             text-align: center;
             gap: 1rem;
+            position: relative;
         }
 
         .set-count {
-            font-size: 5rem; /* Very Big font */
+            margin-top: 2rem;
+            font-size: 6.5rem;
             font-weight: bold;
         }
         .team-boxes {
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem; /* Space between the two boxes */
-        margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem; /* Space between the two boxes */
+            margin-bottom: 0.75rem;
         }
 
         .team-box {
@@ -59,36 +68,74 @@
         }
 
         .team-names {
-            font-size: 2rem; /* Big font */
+            font-size: 3rem; /* Big font */
             font-weight: bold;
             margin-bottom: 1rem;
         }
+        .current-score-container {
+            width: 80%;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        }
         .current-score {
-            font-size: 5rem; /* Big font */
+            font-size: 9rem; /* Big font */
             font-weight: bold;
         }
         .current-set {
-            font-size: 2rem; /* Normal font */
+            font-size: 4rem; /* Normal font */
         }
+        .past-sets-container {
+            width: 80%;
+            background-color: rgba(0, 0, 0, 0.0);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+            position: absolute; /* Positioned relative to the center-panel */
+            bottom: 4rem;
+        }
+
         .past-sets-title {
-            font-size: 3rem; /* Big font */
+            font-size: 5.5rem; /* Bigger font */
+            font-weight: bold;
+            margin-top: 1rem;
         }
         .past-set-result {
-            font-size: 3.5rem; /* Big font */
+            font-size: 5rem; /* Big font */
+            margin: 0.5rem 0;
         }
 
         .player {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background-color: rgba(0, 0, 0, 0.3);
             padding: 1rem;
-            margin: 0.5rem 0;
-            border-radius: 8px;
-            font-size: 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            
+            border-radius: 27px;
+            font-size: 2.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
+        .player-name {
+            flex: 3;
+            text-align: left;
+        }
+
+        .player-score {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 2.25rem;
+        }
+
         .team-name {
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: bold;
             margin-bottom: 1rem;
             text-align: center;
@@ -98,12 +145,25 @@
         }
 
         .total {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             margin-top: 1rem;
             text-align: center;
             padding: 1rem;
             background-color: rgba(0, 0, 0, 0.4);
             border-radius: 8px;
+        }
+        /* Add scrollbar styling for overflow */
+        .team-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .team-panel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+        }
+
+        .team-panel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.7);
         }
 
         .past-sets {
@@ -122,51 +182,57 @@
             <div class="team-name">{{ team.team_name }}</div>
             {% for player in team.players %}
             <div class="player">
-                {{ player.player_name }}: {{ player.total_points }} pts
-                <br>
-                <small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>
+                <div class="player-name">{{ player.player_name }}</div>
+                <div class="player-score">{{ player.total_points }}</div>
+                <!--<small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>-->
             </div>
             {% endfor %}
-            <div class="total">Total: {{ team.team_total }} points</div>
+            <!--<div class="total">Total: {{ team.team_total }} points</div>-->
             {% endfor %}
         </div>
-
         <!-- Center Score Panel -->
         <div class="center-panel">
             <!-- Set Count Team A - Set Count Team B (Very Big font) -->
             <div class="set-count">
                 {{ summary_data[-1].team_set_wins }}
             </div>
-
+<!--
             <div class="team-boxes">
-                <!-- Home Team Box -->
+                TODO line to be commented if you want to use it:
+                Home Team Box 
                 <div class="team-box">
                     <div class="team-names">
                         {{ summary_data[0].team_name }}
                     </div>
                 </div>
 
-                <!-- Away Team Box -->
+                TODO line to be commented if you want to use it:
+                Away Team Box 
                 <div class="team-box">
                     <div class="team-names">
                         {{ summary_data[1].team_name }}
                     </div>
                 </div>
             </div>
-
+-->
             <!-- Score (Big font) -->
-            <div class="current-score">
-                {{ summary_data[-1].set_score }}
+            <div class="current-score-container">
+                <div class="current-score">
+                    {{ summary_data[-1].set_score }}
+                </div>
             </div>
 
-            <!-- Previous Set (Normal font) -->
+            <!-- Previous Set (Normal font)
             <div class="current-set">
                 Set {{ summary_data[-1].current_set }}
-            </div>
+            </div> -->
 
             <!-- Scores of Past Sets (Big font) -->
-            <div class="past-sets">
-                <div class="past-sets-title">Set precedenti</div>
+            <div class="past-sets-container">
+                <!--<div class="past-sets-title">Risultati Precedenti</div>-->
+                <div class="current-set">
+                    Set {{ summary_data[-1].current_set }}
+                </div>
                 {% for score in summary_data[-1].past_set_scores %}
                 <div class="past-set-result">{{ score }}</div>
                 {% endfor %}
@@ -178,13 +244,13 @@
             {% for team in summary_data[:-1][1:] %}
             <div class="team-name">{{ team.team_name }}</div>
             {% for player in team.players %}
-            <div class="player">
-                {{ player.player_name }}: {{ player.total_points }} pts
-                <br>
-                <small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>
+             <div class="player">
+                <div class="player-name">{{ player.player_name }}</div>
+                <div class="player-score">{{ player.total_points }}</div>
+                <!--<small>(Atk: {{ player.attack_points }}, Srv: {{ player.serve_points }}, Blk: {{ player.block_points }})</small>-->
             </div>
             {% endfor %}
-            <div class="total">Total: {{ team.team_total }} points</div>
+            <!--<div class="total">Total: {{ team.team_total }} points</div>-->
             {% endfor %}
         </div>
     </div>
